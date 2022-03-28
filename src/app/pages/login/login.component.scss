@@ -1,0 +1,62 @@
+.temp-login{
+    display: grid;
+    grid-template: 
+	"section-top" 200px
+    "section-content" auto /
+    100%;
+    height: 100%;
+}
+
+.section-top{
+    grid-area: section-top;
+    position: relative;
+    display: grid;
+    padding: 40px 20px;
+    img.fondo{
+        top: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+    }
+
+    .subcard-18{
+        background-image: url("../../../assets/img/sub-18.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 120px;
+        height: 120px;
+        transform: rotate(4.92deg);
+        position: absolute;
+        right: -20px;
+        bottom: -20px;
+    }
+
+    h1{
+        font-weight: 600;
+        align-self: end;
+        color: white;
+    }
+
+}  
+
+.group-logins{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap:10px
+}
+.section-content{
+    grid-area: section-content;
+    display: grid;
+    padding: 20px;
+    justify-content: space-around;
+}
+
+
+
+.btn-recovery-pass{
+    width: 100%;
+    text-decoration: underline;
+}

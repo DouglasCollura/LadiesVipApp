@@ -1,0 +1,39 @@
+.temp-landing{
+    display: grid;
+    grid-template: 
+	"section-top" 50%
+    "section-content" auto/
+    100%;
+}
+
+.section-top{
+    grid-area: section-top;
+    position: relative;
+    display: grid;
+    padding: 10px;
+    img.fondo{
+        top: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+    }
+
+    img.logo{
+        width: 220px;
+        justify-self: center;
+    }
+    .subcard-18{
+        right: 0;
+        bottom: 0;
+    }
+
+}   
+
+.section-content{
+    display: grid;
+    grid-area: section-content;
+    padding: 20px;
+}

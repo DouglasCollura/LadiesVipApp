@@ -29,9 +29,16 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
+            "styles": [
+              "src/theme/variables.scss", 
+              "src/global.scss",
+              "src/theme/grid.scss",
+              "src/assets/icons/style.css",
+              "src/theme/custom.scss"
+            ],
             "scripts": [],
             "aot": false,
             "vendorChunk": true,
@@ -39,7 +46,9 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -109,7 +118,8 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
-              }
+              },
+              "src/manifest.webmanifest"
             ]
           },
           "configurations": {
@@ -151,7 +161,8 @@
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
-      "styleext": "scss"
+      "styleext": "scss",
+      "skipTests": true
     },
     "@ionic/angular-toolkit:page": {
       "styleext": "scss"

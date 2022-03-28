@@ -1,0 +1,296 @@
+@import 'variables';
+@import 'base';
+@import 'components';
+
+input,select, textarea{
+    background: #FFFFFF;
+    border: 1px solid $neutro-300;
+    box-sizing: border-box;
+    border-radius: 100px;
+    height: 45px;
+    padding: 10px 15px;
+    color: $neutro-800;
+    width: 100%;
+    outline: none;
+    margin: 5px 0px;
+}
+textarea{
+    height: auto;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+.form-group{
+    margin-bottom: 10px;
+    text-align: start;
+}
+
+.checkbox-group{
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    grid-gap: 10px;
+    margin-bottom: 16px;
+}
+
+.btn{
+    max-width: 400px;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 11px 18px !important;
+    max-height: 45px;
+    border-radius: 100px;
+    font-weight: 500;
+    width: max-content;
+    min-width: max-content;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    transition: all .15s;
+    -webkit-transition: all .15s;
+    -moz-transition: all .15s;
+    -ms-transition: all .15s;
+    -o-transition: all .15s;
+    display: flex;
+    flex-wrap:wrap;
+    grid-gap: 7px;
+    justify-content: center;
+    align-items: center;
+    
+    &-primary{
+        @extend .btn;
+        background-color: $primario-rosa-2;
+        color: white !important;
+    }
+
+    &-primary-inv{
+        @extend .btn;
+        background-color:white !important;
+        color:  $primario-rosa-2;
+        outline: 1.5px solid $primario-rosa-2;
+    }
+
+    &-secondary{
+        @extend .btn;
+        border: 1.5px solid #35414C;
+    }
+
+    &-disable{
+        @extend .btn;
+        background-color: $neutro-300;
+    }
+
+}
+
+.btn-block{
+    width: 100%;
+}
+
+.btn-genero{
+    @extend  .btn;
+    padding: 11px 15px !important;
+    border: 1px solid $neutro-300;
+    color: $neutro-400 !important;
+    &-active{
+        @extend  .btn;
+        border: 1px solid $primario-rosa-2;
+        color: $primario-rosa-2;
+    }
+}
+
+.btn-circle{
+    width: 60px !important;
+    max-height: 60px !important;
+    height: 60px !important;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+    color: white !important;
+}
+
+
+.subcard-18{
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #426BFF 0%, #C039FF 100%);  
+    border-radius: 40px;
+    transform: rotate(4.92deg);
+    position: absolute;
+    padding: 10px;
+    display: grid;
+    grid-gap: 5px;
+    align-content: start;
+    justify-items: center;
+    text-align: center;
+
+    & *{
+        font-weight: bold;
+        color: white;
+        @include font-size(8px);
+    }
+
+    & h1{
+        @include font-size(36px);
+    }
+}
+
+
+.group-input-icon-left{
+    position: relative;
+    display: grid;
+    align-items: center;
+
+    & >span{
+        position: absolute;
+        left: 10px;
+        font-size: 16px;
+    }
+
+    & >input{
+        padding-left: 35px;
+    }
+}
+
+.group-input-icon-right{
+    position: relative;
+    display: grid;
+    align-items: center;
+    & >span{
+        position: absolute;
+        right: 10px;
+        margin: auto 0px;
+        @include font-size(18px);
+    }
+
+    & >input{
+        padding-right: 35px;
+
+    }
+}
+
+
+.group-line-h{
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+
+    h3{
+        text-align: center;
+        font-weight: 500;
+        color: $neutro-500;
+    }
+
+    .line-h{
+        width: auto;
+        height: 2px;
+        background: $neutro-300;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+    }
+}
+
+.btn-type-login{
+    background: none;
+    padding: 0;
+    border: none;
+}
+
+
+.input-group-append{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 60px auto;
+
+    input{
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+    }
+
+    button{
+        background: none;
+        border: none;
+        border: 1px solid $neutro-400;
+        border-bottom-left-radius: 100px;
+        border-top-left-radius: 100px;
+        height: 45px;
+        display: grid;
+        align-items: center;
+        display: grid;
+        grid-auto-flow: column;
+        align-self: center;
+    }
+
+    .input-append{
+        border-top-left-radius: 100px;
+        border-bottom-left-radius: 100px;
+        border-end-end-radius: 0px;
+        border-start-end-radius: 0px;
+        padding: 10px;
+    }
+}
+
+
+.content-circle-img{
+    display: grid;
+    position: relative;
+    height: 120px;
+    min-width: 120px;
+}
+
+
+.circle-img {
+    overflow: hidden;
+    background-color: $neutro-200;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    justify-self: start;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+
+    *{
+        width: 100%;
+        height: 100%;
+        object-fit:scale-down;
+    }
+}
+
+.sub-circle-img{
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: $alerts-info;
+    bottom: 0px;
+    right: 0px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border: none;
+    color: white !important;
+    font-weight: 500;
+}
+
+.line-h{
+    width: auto;
+    height: 2px;
+    background: $neutro-300;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}   
