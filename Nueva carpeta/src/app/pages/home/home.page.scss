@@ -1,0 +1,246 @@
+@import '../../../theme/variables';
+
+.temp-home{
+    display: grid;
+    background-color: #fff;
+    grid-template: 
+	"section-content" auto
+    "section-menu" 60px /
+    100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.section-menu{
+    grid-area: section-menu;
+    display: grid;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+    background-color: #fff;
+    grid-auto-flow: column;
+    justify-items: space-around;
+    box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    bottom: 0;
+    button{
+        background: none;
+        border: none;
+        padding: 5px;
+        color: $neutro-300;
+        display: grid;
+        span{
+            font-size: 22px;
+            color: inherit;
+            transition: all .15s;
+            -webkit-transition: all .15s;
+            -moz-transition: all .15s;
+            -ms-transition: all .15s;
+            -o-transition: all .15s;
+        }
+    }
+    
+}
+
+.section-content{
+	grid-area: section-content;
+    overflow-y: auto;
+    display: grid;
+    overflow-x: hidden;
+    
+}
+
+.active{
+    color: $primario-rosa-2 !important;
+    position: relative;
+}
+
+.active:before{
+    content: "";
+    position: absolute;
+    align-self: end;
+    justify-self: center;
+    bottom: -4px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: $primario-rosa-2;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+
+.content-main{
+    display: grid;
+    max-width: 430px;
+    min-width: 330px;
+    margin: 0px auto;
+    margin-top:30px;
+    grid-gap:30px;
+    grid-template: 
+	"section-cont-populares" 100px
+    "section-cont-anuncios" auto/
+    100%;
+
+    &-sms, &-notify, &-market, &-profile{
+        display: grid;
+        width: 100%;
+        padding: 12px;
+        max-width: 720px;
+        min-width: 330px;
+        margin: 0px auto;
+        margin-top:30px;
+    }
+
+    &-profile{
+        padding-top: 18px;
+        margin-top: 0px;
+        background-color: $neutro-50;
+    }
+}
+
+
+// ! BAR POPULARES ====================================================
+
+.section-cont-populares{
+	grid-area: section-cont-populares;
+    display: grid;
+    grid-gap: 2px;
+    grid-template-rows: 30px auto;
+
+    .top{
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+    }
+
+    .center{
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-around;
+        grid-gap: 10px;
+        padding: 0px 10px;
+    }
+
+    .btn-filtro{
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.12);
+        border-radius: 100px;
+        width: 68px;
+        height: 66px;
+        max-height: 66px !important;
+        background-color: #ECECEC;
+        position: absolute;
+        z-index: 2;
+        right: -25px;
+        padding-left: 5px !important;
+        span{
+            font-size: 20px;
+            color: black !important;
+        }
+    }
+}
+
+
+.content-img-popular{
+    width: 70px;
+    height: 70px;
+    border:2px solid #F59E0B;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    overflow: hidden;
+
+    img{
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    
+    }
+}
+
+
+// ! BAR ANUNCIOS ====================================================
+
+
+.section-cont-anuncios{
+	grid-area: section-cont-anuncios;
+    display: grid;
+    align-items: center;
+    position: relative;
+}
+
+
+.card-anuncio{
+    margin: 0px auto;
+    width: 340px;
+    height: 500px;
+    filter: drop-shadow(0px 2px 12px rgba(0, 0, 0, .31));
+    -webkit-filter: drop-shadow(0px 2px 12px rgba(0, 0, 0, .31));
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    grid-template: 	    
+    "card-anuncio-img" 370px        
+    "card-anuncio-info" 130px/        
+    100%;
+    overflow: hidden;
+    display: grid;
+    align-self: center;
+
+    &-img{
+        grid-area: card-anuncio-img;
+    
+        overflow: hidden;
+        max-height: 370px;
+        height: 370px;
+        width: 100%;
+        display: grid;
+    
+        img{
+            object-fit: cover;
+            width: 100%;
+            height: 370px;
+        }
+    }
+
+    &-info{
+        grid-area: card-anuncio-info;
+        background-color: white;
+        display: grid;
+        padding-top: 30px;
+        height: 130px;
+        position: relative;
+    }
+}
+
+
+.content-btn{
+    position: absolute;
+    display: grid;
+    grid-auto-flow: column;
+    width: 100%;
+    justify-content: space-around;
+    top: -30px;
+
+    button{
+        background: none;
+        border: none;
+    }
+}
+
+
+@media only screen and (max-width: 400px) {
+
+    .center{
+        justify-content: start !important;
+        padding: 0px !important;
+        grid-gap: 2% !important;
+    }
+
+}

@@ -3,10 +3,11 @@
 .temp-signup{
     display: grid;
     grid-template: 
-	"section-top" 200px
+	"section-top" 160px
     "section-content" auto /
     100%;
     height: 100%;
+    background-color: #fff;
 }
 
 .section-top{
@@ -14,14 +15,21 @@
     position: relative;
     display: grid;
     padding: 40px 20px;
+    >*{
+        z-index: 1;
+    }
     img.fondo{
         top: 0;
         left: 0;
         right: 0;
         position: absolute;
-        z-index: -1;
         width: 100%;
         height: 100%;
+    }
+
+    .subcard-18{
+        bottom: 0;
+        right: 0;
     }
 
     h1{
@@ -83,6 +91,21 @@
 
 // ! LLENADO =============================================================================
 
+.form-location{
+    button{
+        width: 100%;
+        border: 1px solid $neutro-300;
+        height: 50px;
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: stretch;
+        span{
+            font-size: 8px;
+            justify-self: end;
+        }
+    }
+}
+
 .section-uno{
     display: grid;
     margin: 0px auto;
@@ -134,6 +157,7 @@
 
 .group-btn-identidad{
     display: flex;
+    align-content: start;
     flex-wrap:wrap;
     grid-gap: 5px;
 }

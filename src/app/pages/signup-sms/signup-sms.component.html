@@ -1,0 +1,124 @@
+<div class="temp-signup">
+
+    <div class="section-top">
+        <!-- <img class="fondo" src="../../../assets/img/bg-top.png" alt=""> -->
+        <h1 *ngIf="tipo == 0">Crear cuenta</h1>
+        <h1 *ngIf="tipo == 1">Inicia sesión</h1>
+
+        <div class="subcard-18">
+            <h1>+18</h1>
+            <h5>MAYORES DE EDAD</h5>
+        </div>
+    </div>
+
+    <div class="section-content">
+
+        <div class="grid align-content-start gap-20" *ngIf="fase == 1">
+            <div class="form-group">
+                <label for="">Número de teléfono</label>
+                <div class="input-group-append">
+                    <button (click)="display_telf = true" > {{sms.country_short_name}}  <span style="font-size: 5px;" class="icon icon-chevron-down"></span></button>
+                    <input type="text"
+                        inputmode="numeric" 
+                        pattern="[-+]?[0-9]*[.,]?[0-9]+"
+                        placeholder="Ingresar número"
+                        [(ngModel)]="sms.telefono"
+                        (keypress)="SoloNumero($event)" 
+                        maxlength="14"
+                    >
+                </div>
+                <p class="text-error" *ngIf="(error == 1 && tipo == 0)">El número ingresado ya está registrado</p>
+                <p class="text-error" *ngIf="error == 1 && tipo == 1">No estás registrado. Crea una cuenta para poder comenzar en Ladies VIP.</p>
+                <p class="text-error" *ngIf="error == 2">llene todos los campos</p>
+                <p class="text-error" *ngIf="error == 3">El número ingresado es invalido</p>
+                <p class="text-error" *ngIf="error == 4">La plataforma está presentando problemas, intente mas tarde</p>
+            </div>
+
+            <p>Al registrarte o iniciar sesión en Ladies VIP estás aceptando continuar de acuerdo a nuestros términos y condiciones y Políticas de privacidad</p>
+        
+            <button class="btn-block" 
+                [class]="((VacioU(sms.country_short_name) || VacioU(sms.telefono))? 'btn-disable':'btn-primary')"
+                (click)="(!VacioU(sms.country_short_name) || !VacioU(sms.telefono))&&Continuar()"
+                > Continuar <span *ngIf="loading" class="icon icon-loader"></span></button>
+        </div>
+
+        <div class="fase-2" *ngIf="fase == 2">
+            <h4 class="align-self-start">Ingresa el código que fue enviado al número </h4>
+
+            <div class="grid gap-10">
+                <div class="group-input-code">
+                    <input type="text" 
+                        inputmode="numeric" 
+                        pattern="[-+]?[0-9]*[.,]?[0-9]+" 
+                        name="code0" 
+                        [(ngModel)]="code_1" 
+                        (keyup)="nextInput($event,'code1')" 
+                        (keypress)="SoloNumero($event)"  
+                        placeholder="Ingresar número" 
+                        placeholder="0" maxlength="1"
+                    >
+                    <input type="text" name="code1" [(ngModel)]="code_2" inputmode="numeric" pattern="[-+]?[0-9]*[.,]?[0-9]+" (keyup)="nextInput($event,'code2')" (keypress)="SoloNumero($event)" placeholder="Ingresar número" placeholder="0" maxlength="1">
+                    <input type="text" name="code2" [(ngModel)]="code_3" inputmode="numeric" pattern="[-+]?[0-9]*[.,]?[0-9]+" (keyup)="nextInput($event,'code3')" (keypress)="SoloNumero($event)" placeholder="Ingresar número" placeholder="0" maxlength="1">
+                    <input type="text" name="code3" [(ngModel)]="code_4" inputmode="numeric" pattern="[-+]?[0-9]*[.,]?[0-9]+" (keyup)="nextInput($event,'code4')" (keypress)="SoloNumero($event)" placeholder="Ingresar número" placeholder="0" maxlength="1">
+                    <input type="text" name="code4" [(ngModel)]="code_5" inputmode="numeric" pattern="[-+]?[0-9]*[.,]?[0-9]+" (keypress)="SoloNumero($event)" placeholder="Ingresar número" placeholder="0" maxlength="1">
+                </div>
+                <p *ngIf="error == 1" class="text-error">El código ingresado no es correcto.</p> 
+
+
+                <div class="grid align-items-center" style="grid-auto-flow: column;">
+                    <h5>¿No has recibido el código?</h5>
+                    <button 
+                        [class]="true? 'btn-reenviar':'btn-reenviar-disable'" 
+                        (click)="(re_code) && EnviarCodigo()"
+                    >Reenviar código <span *ngIf="!re_code">(espere 2min)</span> </button>
+                </div>
+                
+            </div>
+
+            <button 
+                class="btn-block" 
+                [class]="(VacioU(code_1) || VacioU(code_2)  || VacioU(code_3)|| VacioU(code_4) || VacioU(code_5)) ? 'btn-disable':'btn-primary'"
+                (click)="!(VacioU(code_1) || VacioU(code_2)  || VacioU(code_3)|| VacioU(code_4) || VacioU(code_5)) &&VerificarCodigoSMS()"
+            >Continuar <span class="icon icon-loader" *ngIf="loading"></span></button>
+        </div>
+
+
+    </div>
+</div>
+
+
+<!-- ! FILTRO =================================================================== -->
+
+<div class="bg-card fadeIn"  *ngIf="display_telf">
+    <div class="card-option onUp" >
+        <div class="card-option-header">
+            <button class="btn justify-self-end"> <span class="icon"></span> </button>
+
+            <h3 class=" justify-self-center text-center font-600">Seleccionar otro país</h3>
+
+            <button class="btn justify-self-end" (click)="CerrarModal()"> <span class="icon icon-close"></span> </button>
+        </div>
+
+        <div class="card-option-search">
+            <div class="group-input-icon-left">
+                <span class="icon icon-search"></span>
+                <input type="text" [(ngModel)]="filtro" (keyup)="filtrar()" placeholder="Buscar">
+            </div>
+        </div>
+
+        <div class="card-option-body" *ngIf="telf_filtro.length == 0">
+            <div class="radio-group" style="justify-content: space-between;" *ngFor="let locacion of locaciones;let i = index">
+                <label [for]="i"> {{locacion.country_name}}  ( {{locacion.country_phone_code}} )</label>
+                <input (click)="SelectCodeTlf(locacion.country_phone_code, locacion.country_short_name)" [id]="i" name="tlf" type="radio">
+            </div>
+        </div>
+
+        <div class="card-option-body" *ngIf="telf_filtro.length != 0">
+            <div class="radio-group" style="justify-content: space-between;" *ngFor="let locacion of telf_filtro;let i = index">
+                <label [for]="i"> {{locacion.country_name}}  ( {{locacion.country_phone_code}} )</label>
+                <input (click)="SelectCodeTlf(locacion.country_phone_code, locacion.country_short_name)" [id]="i" name="tlf" type="radio">
+            </div>
+        </div>
+
+    </div>
+</div>

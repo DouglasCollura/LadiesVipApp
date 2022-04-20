@@ -32,13 +32,13 @@
 
             <!-- ! FILTRO Y POPULARES ================================================ -->
 
-            <div class="section-cont-anuncios">
+            <div class="section-cont-anuncios" >
 
                 <!-- !CARD  ANUNCIO============================= -->
-                <div class="card-anuncio">
+                <div class="card-anuncio" (click)="OpenAnuncio(anuncio)" #card  *ngFor="let anuncio of anuncios.data" >
 
-                    <div class="card-anuncio-img" (click)="ctrl_modal_detalles = true">
-                        <img src="../../../assets/img/user_example.jpg" alt="">
+                    <div class="card-anuncio-img">
+                        <img [src]="showImage(anuncio.urls)" alt="">
                     </div>
 
                     <div class="card-anuncio-info">
@@ -48,14 +48,12 @@
                             <button> <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
                         </div>
                         <div class="grid align-self-center justify-items-center gap-10">
-                            <h2 class="font-500 ">Nataly Torres</h2>
-                            <h3>23 años . Sevilla, España</h3>
+                            <h2 class="font-500 "> {{anuncio.usuario.name}} </h2>
+                            <h3> {{GetEdad(anuncio.usuario.fecha_nac)}}  años . {{anuncio.usuario.estado}}, {{anuncio.usuario.pais}} </h3>
                         </div>
                     </div>
                 </div><!-- !FINCARD =============================   -->
-                
             </div>
-
 
             <!-- ! MODAL DETALLE USUARIO ================================================ -->
             <div class="container" *ngIf="ctrl_modal_detalles">
@@ -92,7 +90,9 @@
                 </div>
             </div>
 
+            
         </div>
+
 
         <app-market class="content-main-market" *ngIf="ctrl_menu == 1"></app-market>
 
@@ -102,7 +102,6 @@
 
         <app-profile class="content-main-profile" *ngIf="ctrl_menu == 4"></app-profile>
     </div>
-
 
     <div class="section-menu">
             <button [class]="ctrl_menu == 0?'active':''" id="home" (click)="nav(0)" ><span class="icon icon-home"></span></button>

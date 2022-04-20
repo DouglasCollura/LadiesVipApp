@@ -2,16 +2,16 @@
 
     <div class="section-content">
 
-        <button id="config" class="btn"> <span class="icon icon-gear"></span> </button>
+        <button id="config" class="btn" [routerLink]="['config']" routerLinkActive="router-link-active"  > <span class="icon icon-gear"></span> </button>
 
         <div class="content">
             <div class="content-img">
-                <img src="../../../../assets/img/user_example.jpg" alt="">
+                <img [src]="url+datos.img_route" alt="">
 
             </div>
             <div>
-                <h1>Luisa Montero</h1>
-                <h4>23 años • Sevilla, España</h4>
+                <h1> {{datos.name}} </h1>
+                <h4> {{GetEdad()}} años • {{datos.estado}}, {{datos.pais}} </h4>
             </div>       
             
             <div class="gestion">
@@ -20,9 +20,10 @@
                     SER PREMIUM
                 </button>
 
-                <button>
+                <button routerLink="config/anuncio" >
                     <img  src="../../../../assets/img/create-ads.png" alt="">
-                    CREAR ANUNCIO
+                    <span *ngIf="!myadd"> CREAR ANUNCIO</span>
+                <span *ngIf="myadd"> EDITAR ANUNCIO</span>
                 </button>
             </div>
 
@@ -54,4 +55,4 @@
 
 </div>
 
-<app-config *ngIf="false"></app-config>
+<!-- <app-config *ngIf="false"></app-config> -->

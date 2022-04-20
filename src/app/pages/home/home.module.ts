@@ -8,7 +8,7 @@ import { MarketComponent } from '../market/market.component';
 import { MensajesComponent } from '../mensajes/mensajes.component';
 import { NotifyComponent } from '../notify/notify.component';
 import { ProfileComponent } from '../profile/profile/profile.component';
-import { ConfigComponent } from '../profile/config/config.component';
+import { AnuncioComponent } from './anuncio/anuncio.component';
 
 @NgModule({
   imports: [
@@ -18,12 +18,13 @@ import { ConfigComponent } from '../profile/config/config.component';
     HomePageRoutingModule,
   ],
   declarations: [
+    
     HomePage,
     MarketComponent,
     MensajesComponent,
     NotifyComponent,
     ProfileComponent,
-    ConfigComponent
+    AnuncioComponent
   ]
 })
 export class HomePageModule {}

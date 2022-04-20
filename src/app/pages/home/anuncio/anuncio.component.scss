@@ -1,0 +1,101 @@
+.temp-anuncio{
+    background-color: white;
+    display: grid;
+    min-height: 100%;
+    position: relative;
+    grid-template: 
+	"section-photo" 400px
+    "section-body" auto /
+    100%;
+}
+
+.section-photo{
+    display: grid;
+    grid-area:section-photo;
+    width: 100%;
+    min-height: 300px;
+    max-height: 400px;
+    overflow: hidden;
+    position: relative;
+    img{
+        position: absolute;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.section-body{
+    grid-area: section-body;
+    display: grid;
+    position: relative;
+    height: 100%;
+    background-color: #fff;
+    .content{
+        position: absolute;
+        width: 100%;
+        top: -20px;
+        height: 100%;
+        bottom:0;
+        background-color: #fff;
+        border-radius: 24px 24px 0px 0px;
+        display: grid;
+        grid-gap: 8px;
+        align-content: start;
+        .top{
+            height: 40px;
+            position: absolute;
+            display: grid;
+            grid-auto-flow: column;
+            width: 100%;
+            justify-content: space-around;
+            top: -30px;
+
+            button{
+                background: none;
+                border: none;
+            }
+        }
+        .body{
+            display: grid;
+            padding: 15px;
+            grid-gap: 12px;
+            margin-top: 35px;
+
+            .nombre{
+                font-size: 28px;
+            }
+        }
+
+        .group-contact{
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: start;
+            grid-gap: 20px;
+            button{
+                background: none;
+                border: none;
+            }
+        }
+    }
+
+}
+
+.btn-back{
+    position: absolute;
+    width: 45px;
+    padding: 0px !important;
+    height: 45px;
+    top: 10px;
+    z-index: 2;
+    left: 5px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.36);
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    span{
+        color:white !important
+    }
+}

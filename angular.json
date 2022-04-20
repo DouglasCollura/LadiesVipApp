@@ -39,7 +39,9 @@
               "src/assets/icons/style.css",
               "src/theme/custom.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js"
+            ],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,

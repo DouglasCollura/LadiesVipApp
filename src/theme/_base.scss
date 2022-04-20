@@ -37,7 +37,7 @@
 	margin: 0;
 	padding: 0;	
 	font-weight:400;
-	color: $neutro-700;
+	color: $neutro-600;
     @include font-size(16px);
 }
 html{
@@ -50,7 +50,7 @@ body{
 	min-height: 100%;
 	font-family: Ubuntu;
 	@include font-size(16px);
-	color: $neutro-700;
+	color: $neutro-600;
     background-color: #fff;
 }
 
@@ -67,10 +67,10 @@ body{
 
 h1,h2,h3,h4{margin: 0px; padding: 0px;}
 h1{@include font-size(24px);}
-h2{@include font-size(18px);}
-h3{@include font-size(16px);}
-h4{@include font-size(14px);}
-h5{@include font-size(12px);}
+h2{@include font-size(22px);}
+h3{@include font-size(19px);}
+h4{@include font-size(16px);}
+h5{@include font-size(14px);}
 
 p{
 	@include font-size(14px);	
@@ -93,6 +93,10 @@ label{
 
 .text-alert{
     color: $alerts-info !important;
+}
+
+.text-primary{
+	color: $primario-rosa-2 !important
 }
 
 /* * 

@@ -1,0 +1,44 @@
+<div class="temp-anuncio">
+    <button class=" btn btn-back" routerLink=".." > <span class="icon icon-chevron-left"></span> </button>
+    <div class="section-photo">
+        <img [src]="url+urls_image[0]" alt="">
+    </div>
+    <div class="section-body">
+        <div class="content">
+            <div class="top">
+                <button> <img src="../../../assets/img/anuncio_close.svg" alt=""> </button>
+                <button> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
+                <button> <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
+            </div>
+
+            <div class="body">
+                <h1 class="font-600 nombre"> {{anuncio.usuario.name}}</h1>
+
+                <h2 class="text-alert">23 años • {{anuncio.usuario.estado}},{{anuncio.usuario.pais}}</h2>
+
+                <h3> <span class="icon icon-mail"></span> {{anuncio.usuario.email}}  </h3>
+                <h3> <span class="icon icon-phone"></span> +{{anuncio.usuario.code_phone}} {{anuncio.usuario.telefono}} </h3>
+
+                <div class="flex-column">
+                    <h3> <span class="icon icon-brujula"></span> Busco: </h3> 
+                    <span>pareja</span>
+                    <!-- <button class="btn-disable" *ngFor="let item of intereses_name" >
+                        {{item}}
+                    </button> -->
+                </div>
+
+                <p>
+                    {{anuncio.descripcion}}
+                </p>
+                
+                <div class="group-contact">
+                    <button> <img src="../../../assets/img/cont_phone.png" alt=""> </button>
+                    <button *ngIf="anuncio.hab_chat" > <img src="../../../assets/img/cont_sms.png" alt=""> </button>
+                    <button *ngIf="anuncio.hab_wts"> <img src="../../../assets/img/cont_wts.png" alt=""> </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

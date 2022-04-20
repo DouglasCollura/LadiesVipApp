@@ -1,4 +1,4 @@
-<div class="temp-market">
+<div *ngIf="display_market" class="temp-market">
 
     <div class="market-section-filtro">
         <div class="grid gc-2x-g">
@@ -34,6 +34,8 @@
     </div>
 
     <div class="market-section-categorias">
+        <h5>CATEGORÍAS</h5>
+
         <div class="card-categorias">
             <h4>MASAJES ERÓTICOS</h4>
             <img src="../../../assets/img/categoria_example.jpg" alt="">
@@ -54,6 +56,53 @@
             <img src="../../../assets/img/categoria_example4.jpg" alt="">
         </div>
 
+    </div>
+
+</div>
+
+<div *ngIf="display_res" class="temp-res">
+    <div class="header">
+        <button class="btn" routerLink=".."> <span class="icon icon-chevron-left"></span> </button>
+        <h3 class="font-500 justify-self-center">Masajes eróticos</h3>
+    </div>
+
+    <div class="body">
+        <div class="group-input-icon-left">
+            <span class="icon icon-search"></span>
+            <input type="text" placeholder="Buscar">
+        </div>
+
+        <div class="section-negocio">
+            <div class="img">
+                <img src="../../../assets/img/anuncio_example.jpg" alt="">
+            </div>
+
+            <div class="content">
+                <h3 class="font-600">Nombre del negocio</h3>
+
+                <h4 class="font-600"> <span class="icon icon-location"></span> Sevilla </h4>
+            </div>
+
+            <div class="grid align-content-center">
+                <button class="btn"><span class="icon icon-chevron-right"></span></button>
+            </div>
+        </div>
+
+        <div class="section-negocio">
+            <div class="img">
+                <img src="../../../assets/img/anuncio_example.jpg" alt="">
+            </div>
+
+            <div class="content">
+                <h3 class="font-600">Nombre del negocio</h3>
+
+                <h4 class="font-600"> <span class="icon icon-location"></span> Sevilla </h4>
+            </div>
+
+            <div class="grid align-content-center">
+                <button class="btn"><span class="icon icon-chevron-right"></span></button>
+            </div>
+        </div>
     </div>
 
 </div>

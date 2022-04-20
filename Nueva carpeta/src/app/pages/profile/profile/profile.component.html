@@ -1,0 +1,57 @@
+<div class="temp-profile">
+
+    <div class="section-content">
+
+        <button id="config" class="btn" [routerLink]="['config']" routerLinkActive="router-link-active"  > <span class="icon icon-gear"></span> </button>
+
+        <div class="content">
+            <div class="content-img">
+                <img src="../../../../assets/img/user_example.jpg" alt="">
+
+            </div>
+            <div>
+                <h1>Luisa Montero</h1>
+                <h4>23 años • Sevilla, España</h4>
+            </div>       
+            
+            <div class="gestion">
+                <button>
+                    <img  src="../../../../assets/img/be-premium.png" alt="">
+                    SER PREMIUM
+                </button>
+
+                <button routerLink="config/anuncio" >
+                    <img  src="../../../../assets/img/create-ads.png" alt="">
+                    CREAR ANUNCIO
+                </button>
+            </div>
+
+        </div>
+
+        <button id="favoritos" class="btn"> <span class="icon icon-start"></span> </button>
+
+    </div>
+
+    <div class="section-promo">
+
+        <div class="promo">
+            <h3>NUESTRAS PROMOCIONES</h3>
+
+            <img src="../../../../assets/img/diamont-gold.svg" alt="">
+    
+            <h1 class="font-600">Promoción Plus </h1>
+    
+            <h3>1 anuncio • 10 renovaciones/boost</h3>
+        </div>
+
+        <div class="slide-points">
+            <div class="point"></div>
+            <div class="point-active"></div>
+            <div class="point"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- <app-config *ngIf="false"></app-config> -->
