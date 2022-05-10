@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AnuncioComponent } from '../anuncio/anuncio.component';
 import { CuentaAccesoComponent } from '../cuenta-acceso/cuenta-acceso.component';
+import { HelpComponent } from '../help/help.component';
 import { InformacionPersonalComponent } from '../informacion-personal/informacion-personal.component';
 import { NegociosComponent } from '../negocios/negocios.component';
 import { PacksAnunciosComponent } from '../packs-anuncios/packs-anuncios.component';
+import { PagoComponent } from '../pago/pago.component';
 
 import { ConfigPage } from './config.page';
 
@@ -32,6 +34,14 @@ const routes: Routes = [
   {
     path: 'cuenta-acceso',
     component: CuentaAccesoComponent
+  },
+  {
+    path: 'pago',
+    component: PagoComponent
+  },
+  {
+    path: 'help',
+    component: HelpComponent
   }
 ];
 

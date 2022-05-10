@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 // ! FIRE BASE ======================================================================
 import { AngularFireModule } from '@angular/fire/compat';
@@ -16,7 +16,12 @@ import { LoginComponent } from '../login/login.component';
 import { SignupComponent } from '../signup/signup.component';
 import { RecoverypassComponent } from '../recoverypass/recoverypass.component';
 import { SignupSmsComponent } from '../signup-sms/signup-sms.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 SignupComponent 
 @NgModule({
@@ -28,6 +33,13 @@ SignupComponent
     LandingPageRoutingModule,
     AngularFireModule.initializeApp(firebaseApp.firebase),
     AngularFireAuthModule,
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: (createTranslateLoader),
+          deps: [HttpClient]
+      }
+  })
   ],
   declarations: [
     LandingPage,

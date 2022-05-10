@@ -32,7 +32,7 @@ export class InformacionPersonalComponent implements OnInit {
 
         this.ctrl_intereses = this.datos.interes_identidad.split(",");
         this.ctrl_identidad = this.datos.identidad.split(",");
-        if(this.datos.interes_servicio != ""){
+        if(this.datos.interes_servicio != "" && this.datos.interes_servicio != null){
             this.ctrl_servicios = this.datos.interes_servicio.split(",");
         }
         console.log(this.ctrl_intereses)
@@ -95,6 +95,7 @@ export class InformacionPersonalComponent implements OnInit {
     display_ciudad:boolean=false;
 
     loading:boolean=false;
+    loading_global:boolean=false;
     //? FILTROS==========================================================
     filtro:string="";
     pais_filtro:any=[];
@@ -171,14 +172,16 @@ export class InformacionPersonalComponent implements OnInit {
     UpdateUser():any{
 
         this.data.append("user", JSON.stringify(this.datos));
-        
+        this.loading_global = true;
         this.UserService.UpdateUser(this.data).then(res=>{
             console.log(res)
             this.datos.img_route = res.url;
             localStorage.removeItem("usuario");
             localStorage.setItem("usuario",JSON.stringify(this.datos))
+            this.loading_global = false;
+
             this.splashScreenStateService.start();
-            // location.reload();
+            location.reload();
         });
     }
 

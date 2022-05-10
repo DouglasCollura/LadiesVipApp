@@ -11,7 +11,7 @@ export class MarketComponent implements OnInit {
 
   ngOnInit() {}
 
-  display_market:boolean=false;
-  display_res:boolean=true;
+  display_market:boolean=true;
+  display_res:boolean=false;
 
 }

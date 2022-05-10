@@ -30,7 +30,7 @@ export  function Vacio(datas:any){
     let res:boolean = false;
     for (const [key, value] of Object.entries(datas)) {
         if((value == '' || value == null) && value != 0 ){
-            console.log(key);
+            // console.log(key);
             res = true;
             break;
         }else{

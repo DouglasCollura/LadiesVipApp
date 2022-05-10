@@ -9,7 +9,7 @@ import { MensajesComponent } from '../mensajes/mensajes.component';
 import { NotifyComponent } from '../notify/notify.component';
 import { ProfileComponent } from '../profile/profile/profile.component';
 import { AnuncioComponent } from './anuncio/anuncio.component';
-
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 @NgModule({
   imports: [
     CommonModule,
@@ -25,6 +25,7 @@ import { AnuncioComponent } from './anuncio/anuncio.component';
     NotifyComponent,
     ProfileComponent,
     AnuncioComponent
-  ]
+  ],
+  providers: [CallNumber],
 })
 export class HomePageModule {}

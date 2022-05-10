@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StatusBar, StatusBarAnimation, Style } from '@capacitor/status-bar';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -7,11 +7,16 @@ import { StatusBar, StatusBarAnimation, Style } from '@capacitor/status-bar';
 })
 export class AppComponent {
 
-    constructor() {
-        StatusBar.setOverlaysWebView({ overlay: true});
-        StatusBar.hide({ animation: StatusBarAnimation.Slide});
+    constructor(
+        private StatusBar:StatusBar,
+        
+    ) {
+        
+        this.StatusBar.overlaysWebView(false);
+        this.StatusBar.backgroundColorByHexString('#fcfcfc');
+        this.StatusBar.styleDefault();
 
+       
     }
-
 
 }

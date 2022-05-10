@@ -1,14 +1,19 @@
-<div class="temp-anuncio">
+<div class="temp-anuncio" >
     <button class=" btn btn-back" routerLink=".." > <span class="icon icon-chevron-left"></span> </button>
-    <div class="section-photo">
-        <img [src]="url+urls_image[0]" alt="">
+    <div class="section-photo" >
+        <img #images  [src]="url+urls" *ngFor="let urls of urls_image.slice().reverse(); let i = index" alt="">
+
+        <div class="points-group">
+            <!-- <div class="point-active"></div> -->
+            <div [id]="i" [ngClass]="point_img == i? 'point-active':'point'" *ngFor="let urls of urls_image; let i = index"></div>
+        </div>
     </div>
     <div class="section-body">
         <div class="content">
             <div class="top">
-                <button> <img src="../../../assets/img/anuncio_close.svg" alt=""> </button>
-                <button> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
-                <button> <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
+                <button (click)="cardDiss()"> <img src="../../../assets/img/anuncio_close.svg" alt=""> </button>
+                <button (click)="cardFav()"> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
+                <button (click)="cardCheck()" > <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
             </div>
 
             <div class="body">
@@ -32,9 +37,9 @@
                 </p>
                 
                 <div class="group-contact">
-                    <button> <img src="../../../assets/img/cont_phone.png" alt=""> </button>
+                    <button (click)="GoToCall()" > <img src="../../../assets/img/cont_phone.png" alt=""> </button>
+                    <button *ngIf="anuncio.hab_wts" (click)="GoToBrowser()" > <img src="../../../assets/img/cont_wts.png" alt=""> </button>
                     <button *ngIf="anuncio.hab_chat" > <img src="../../../assets/img/cont_sms.png" alt=""> </button>
-                    <button *ngIf="anuncio.hab_wts"> <img src="../../../assets/img/cont_wts.png" alt=""> </button>
                 </div>
 
             </div>

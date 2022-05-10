@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { DomController, Gesture, GestureController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
+import { NavController, Platform } from "@ionic/angular";
 
 // ! ASSETS ============================================
 declare var $: any;
@@ -23,7 +24,12 @@ export class HomePage implements OnInit, AfterViewInit {
         private gestureCtrl: GestureController,
         private domCtrl: DomController,
         private router: Router,
+        public navCtrl: NavController, 
+        public platform: Platform
     ) {
+        this.platform.backButton.subscribeWithPriority(10, () => {
+            console.log('Handler was called!');
+        });
 
     }
 
@@ -40,12 +46,13 @@ export class HomePage implements OnInit, AfterViewInit {
     changing:any = 0;
     polygons:any = [];
     quartier:any = 0;
+
+    cont = 10;
+
     async ngOnInit() {
         this.GetAnuncios();
-
     }
 
-  
 
     async ngAfterViewInit() {
         this.card.changes
@@ -53,6 +60,22 @@ export class HomePage implements OnInit, AfterViewInit {
             let cardArray = this.card.toArray();
             this.GestionAnunciosX(cardArray)
             this.GestionAnunciosY(cardArray)
+        })
+
+        
+        this.AnunciosService.add_select.subscribe(res=>{
+            if(res){
+                console.log(this.card)
+            }
+            $(this.add_select[0]).remove()
+            this.card.forEach((car: any, index: any, object: any)=> {
+                
+                if (car.nativeElement.id == this.add_select[0].id) {
+                    console.log(index)
+                    object.splice(index, 1);
+                    console.log(this.card)
+                }
+            });
         })
     }
 
@@ -153,11 +176,11 @@ export class HomePage implements OnInit, AfterViewInit {
     anuncio: any = [];
 
     //?CONTROL===================================================================================
+    add_select:any;
     loggedIn: boolean = false;
     load: boolean = false;
     hoy = new Date();
     // * MODALES ================================
-    ctrl_modal_detalles: boolean = false;
     ctrl_menu: number = 0;
     server = environment.server;
     
@@ -177,7 +200,6 @@ export class HomePage implements OnInit, AfterViewInit {
     //?GESTION============================================================
 
     PassAnuncio() {
-        console.log('ayo')
         this.anuncio.usuario.name = 'prueba';
         let actual = this.anuncios.index + 1;
     }
@@ -187,9 +209,35 @@ export class HomePage implements OnInit, AfterViewInit {
         return this.server + urls.split(",")[0];
     }
 
+
+    cardCheck(id:any){
+        $("#"+id).addClass("card_check")
+
+        setTimeout(()=>{
+            $("#"+id).css("display","none")
+        },500)
+    }
+
+    cardDiss(id:any){
+        $("#"+id).addClass("card_diss")
+
+        setTimeout(()=>{
+            $("#"+id).css("display","none")
+        },450)
+    }
+
+    cardFav(id:any){
+        $("#"+id).addClass("card_fav")
+
+        setTimeout(()=>{
+            $("#"+id).css("display","none")
+        },450)
+    }
+
     //?CONTROL==============================================================================
 
-    OpenAnuncio(anuncio:any){
+    OpenAnuncio(anuncio:any, id:any){
+        this.add_select = $("#"+id);
         this.AnunciosService.anuncio = anuncio;
         this.router.navigate(['home/anuncio'])
     }

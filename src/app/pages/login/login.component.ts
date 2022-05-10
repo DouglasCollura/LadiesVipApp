@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreenStateService } from 'src/app/services/splash-screen-state.service';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { FacebookLogin } from '@capacitor-community/facebook-login';
+import { HttpClient } from '@angular/common/http';
+import { Platform } from '@ionic/angular';
 
 // ! SERVICIOS ============================================
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -26,10 +30,19 @@ export class LoginComponent implements OnInit {
         private FacebookService: FacebookService,
         private splashScreenStateService: SplashScreenStateService,
         private SmsService:SmsService,
-
+        private platform:Platform,
+        private http:HttpClient,
     ) { }
 
     ngOnInit() { 
+        this.splashScreenStateService.stop()
+        this.initializeApp();
+    }
+
+    initializeApp() {
+        this.platform.ready().then(() => {
+          GoogleAuth.initialize()
+        })
     }
 
     //!DATA=====================================================================
@@ -42,6 +55,8 @@ export class LoginComponent implements OnInit {
         datos: {
             correo: null,
             clave: null,
+            tipo:null,
+            nombre:null
         },
         tipo: 1
     }
@@ -53,7 +68,7 @@ export class LoginComponent implements OnInit {
     viewPass:boolean=false;
     loading:boolean = false;
     displayRecovery:boolean=false;
-
+    token:any=null;
 
     //!FUNCIONES=============================================================
 
@@ -61,57 +76,83 @@ export class LoginComponent implements OnInit {
 
 
     //?GESTION============================================================
+    async LogInGoogle(){
+        this.error = 0;
 
-    signInWithGoogle(): void {
-        this.GoogleService.GoogleAuth()
-            .then((res: any) => {
+        GoogleAuth.signOut().then(()=>{
+
+            GoogleAuth.signIn().then((res:any)=>{
+                console.log(res.email)
                 this.usuario.tipo = 2;
-                this.usuario.datos.nombre = res.additionalUserInfo.profile.name;
-                this.usuario.datos.correo = res.additionalUserInfo.profile.email;
-                //valida que el email esté registrado
-                this.AuthService.ValEmail({ tipo: this.usuario.tipo, email: this.usuario.datos.correo })
-                    .then(email => {
-                        //si existe procede a iniciar sesison
-                        if (email.success) {
-                            this.AuthService.loginSocial(this.usuario)
-                                .then(login => {
-                                    localStorage.setItem('usuario', JSON.stringify(login.data));
-                                    localStorage.setItem('ruta_img', JSON.stringify(login.data.img_route));
-                                    localStorage.setItem('token', login.access_token);
-                                    location.href = '/home';
-                                })
-                        }
-                        //error si no es un usuario facebook o no registrado
-                        if (email.error) {
-                            alert('error, compruebe su email o compruebe otro metodo de logueo')
-                        }
-                    })
-            });
+                this.usuario.datos.correo = res.email;
+                this.AuthService.ValEmail({ tipo: 2, email: res.email })
+                .then(email => {
+                    if (email.success) {
+                        this.AuthService.loginSocial(this.usuario)
+                        .then(login => {
+                            localStorage.setItem('usuario', JSON.stringify(login.data));
+                            localStorage.setItem('ruta_img', JSON.stringify(login.data.img_route));
+                            localStorage.setItem('token', login.access_token);
+                            location.href = '/home';
+                        })
+                    }
+    
+                    if (email.error) {
+                        this.error = 1;
+                    }
+                })
+            })
+        })
     }
-    signInWithFB(): void {
-        this.FacebookService.FacebookAuth()
-            .then((res: any) => {
+
+    async LogInFacebook(){
+        this.error = 0;
+        const FACEBOOK_PERMISSIONS = [
+          'email',
+          'user_birthday',
+          'user_photos',
+          'user_gender',
+        ];
+    
+        const result = await FacebookLogin.login({
+          permissions: FACEBOOK_PERMISSIONS,
+        });
+
+        if (result && result.accessToken) {
+            this.token = result.accessToken;
+            this.usuario.tipo = 3;
+            console.log(result)
+            const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
+            this.http.get(url).subscribe( (res:any) => {
+                console.log("load")
+                console.log(res)
+                this.usuario.datos.correo = res.email;
                 this.usuario.tipo = 3;
-                this.usuario.datos.correo = res.additionalUserInfo.profile.email;
-                //valida que el email esté registrado
                 this.AuthService.ValEmail({ tipo: this.usuario.tipo, email: this.usuario.datos.correo })
-                    .then(email => {
-                        //si existe procede a iniciar sesison
-                        if (email.success) {
-                            this.AuthService.loginSocial(this.usuario)
-                                .then(login => {
-                                    localStorage.setItem('usuario', JSON.stringify(login.data));
-                                    localStorage.setItem('ruta_img', JSON.stringify(login.data.img_route));
-                                    localStorage.setItem('token', login.access_token);
-                                    location.href = '/home';
-                                })
-                        }
-                        //error si no es un usuario facebook o no registrado
-                        if (email.error) {
-                            alert('error, compruebe su email o compruebe otro metodo de logueo')
-                        }
-                    })
+                .then(email=>{
+                    if (email.success) {
+                        this.AuthService.loginSocial(this.usuario)
+                        .then(login => {
+                            localStorage.setItem('usuario', JSON.stringify(login.data));
+                            localStorage.setItem('ruta_img', JSON.stringify(login.data.img_route));
+                            localStorage.setItem('token', login.access_token);
+                            location.href = '/home';
+                        })
+                    }
+                    if (email.error) {
+                        this.error = 1;
+                    }
+                })
+            })
+        }else{
+            this.logoutFacebook().then(()=>{
+                this.LogInFacebook()
             });
+        }
+    }
+
+    async logoutFacebook() {
+        await FacebookLogin.logout();
     }
 
     LoginSms(){
@@ -183,8 +224,12 @@ export class LoginComponent implements OnInit {
     }
 
     ValAcceso() {
+
+
+
+
         if (
-            Vacio(this.usuario.datos) ||
+            VacioU(this.usuario.datos.correo) || VacioU(this.usuario.datos.clave) ||
             !/^\w+([\.-]?\w+)*@(?:|hotmail|outlook|yahoo|live|gmail)\.(?:|com|es)+$/.test(this.usuario.datos.correo) ||
             this.usuario.datos.clave.length < 8
         ) {

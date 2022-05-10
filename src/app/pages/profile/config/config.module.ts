@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
 
 import { ConfigPageRoutingModule } from './config-routing.module';
@@ -12,6 +11,10 @@ import { PacksAnunciosComponent } from '../packs-anuncios/packs-anuncios.compone
 import { InformacionPersonalComponent } from '../informacion-personal/informacion-personal.component';
 import { NegociosComponent } from '../negocios/negocios.component';
 import { CuentaAccesoComponent } from '../cuenta-acceso/cuenta-acceso.component';
+import { PagoComponent } from '../pago/pago.component';
+import { HelpComponent } from '../help/help.component';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -25,7 +28,9 @@ import { CuentaAccesoComponent } from '../cuenta-acceso/cuenta-acceso.component'
     PacksAnunciosComponent,
     InformacionPersonalComponent,
     NegociosComponent,
-    CuentaAccesoComponent
-  ]
+    CuentaAccesoComponent,
+    PagoComponent,
+    HelpComponent
+  ],
 })
 export class ConfigPageModule {}

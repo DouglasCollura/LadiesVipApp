@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnunciosService } from 'src/app/services/anuncios/anuncios.service';
 import { environment } from 'src/environments/environment';
-
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-profile',
     templateUrl: './profile.component.html',
@@ -11,6 +11,7 @@ export class ProfileComponent implements OnInit {
 
     constructor(
         private AnunciosService: AnunciosService,
+        private Router:Router
     ) { }
 
     ngOnInit() {
@@ -46,5 +47,10 @@ export class ProfileComponent implements OnInit {
                 edad--;
             }
             return edad;
+    }
+
+
+    config(){
+        this.Router.navigate(['home/config'])       
     }
 }

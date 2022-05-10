@@ -124,7 +124,7 @@
             <p>*Esta información solo servirá para mostrarte a personas potenciales por medio de filtros</p>
         </div>
 
-        <button class="btn-primary btn-block" (click)="UpdateUser()">Siguiente</button>
+        <button class="btn-primary btn-block" (click)="UpdateUser()">Guardar cambios</button>
     </div>
 </div>
 
@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <button class="btn-primary btn-block" (click)=" (datos.ciudad && datos.pais && datos.estado) && UpdateUser()" >Siguiente</button>
+        <button class="btn-primary btn-block" (click)=" (datos.ciudad && datos.pais && datos.estado) && UpdateUser()" >Guardar cambios</button>
     </div>
 </div>
 
@@ -187,7 +187,7 @@
             </div>
         </div>
 
-        <button class="btn-primary btn-block" (click)="UpdateIdentidad()" >Siguiente</button>
+        <button class="btn-primary btn-block" (click)="UpdateIdentidad()" >Guardar cambios</button>
     </div>
 </div>
 
@@ -223,7 +223,7 @@
             </div>
         </div>
 
-        <button class="btn-primary btn-block" (click)="UpdateInteres()" >Siguiente</button>
+        <button class="btn-primary btn-block" (click)="UpdateInteres()" >Guardar cambios</button>
     </div>
 </div>
 
@@ -335,4 +335,7 @@
         </div>
 
     </div>
+</div>
+<div class="container" *ngIf="loading_global"> 
+    <span class="icon icon-loading loading"></span>
 </div>

@@ -10,7 +10,8 @@ import { environment } from '../environments/environment';
 import { LandingPageModule } from './pages/landing/landing.module';
 import { SplashScreenStateService } from './services/splash-screen-state.service';
 import { SplashScreenStateComponent } from './pages/splash-screen-state/splash-screen-state.component';
-
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 @NgModule({
   declarations: [AppComponent,SplashScreenStateComponent],
   entryComponents: [],
@@ -25,7 +26,7 @@ import { SplashScreenStateComponent } from './pages/splash-screen-state/splash-s
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [SplashScreenStateService,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [StatusBar,SplashScreenStateService,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

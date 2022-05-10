@@ -60,6 +60,9 @@ export class AnuncioComponent implements OnInit {
 
     loading:boolean=false;
     done:boolean=false;
+    blur:boolean=false;
+    update:boolean=false;
+    fase_update=0;
     //!FUNCIONES===========================================================================================================
 
 
@@ -126,7 +129,18 @@ export class AnuncioComponent implements OnInit {
         this.formData.append("length", ""+this.img_length);
         this.formData.append("anuncio",JSON.stringify(this.anuncio))
         this.formData.append("img_delete",JSON.stringify(this.urls_delete))
+        this.fase_update = 1;
         this.AnunciosService.UpdateAnuncio(this.formData,this.id).then((res)=>{
+
+            this.fase_update = 2;
+            
+            setTimeout(()=>{
+                this.fase_update = 0;
+                this.update=false;
+                this.blur = false;
+            }, 1000)
+
+            
             console.log(res)
         })
     }
@@ -209,6 +223,16 @@ export class AnuncioComponent implements OnInit {
     Cerrar(){
         this.splashScreenStateService.start();
         location.href = '/home';
+    }
+
+    checkUpdate(){
+        this.blur=true; 
+        this.update=true;
+    }
+
+    closeUpdate(){
+        this.blur=false; 
+        this.update=false;
     }
 
 }

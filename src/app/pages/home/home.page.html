@@ -35,17 +35,17 @@
             <div class="section-cont-anuncios" >
 
                 <!-- !CARD  ANUNCIO============================= -->
-                <div class="card-anuncio" (click)="OpenAnuncio(anuncio)" #card  *ngFor="let anuncio of anuncios.data" >
+                <div class="card-anuncio" [id]=" 'card'+i "  #card  *ngFor="let anuncio of anuncios.data; let i = index" >
 
-                    <div class="card-anuncio-img">
+                    <div class="card-anuncio-img" (click)="OpenAnuncio(anuncio, 'card'+i)">
                         <img [src]="showImage(anuncio.urls)" alt="">
                     </div>
 
                     <div class="card-anuncio-info">
                         <div class="content-btn">
-                            <button> <img src="../../../assets/img/anuncio_close.svg" alt=""> </button>
-                            <button> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
-                            <button> <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
+                            <button (click)="cardDiss('card'+i)"> <img src="../../../assets/img/anuncio_close.svg" alt=""> </button>
+                            <button (click)="cardFav('card'+i)"> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
+                            <button (click)="cardCheck('card'+i)"> <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
                         </div>
                         <div class="grid align-self-center justify-items-center gap-10">
                             <h2 class="font-500 "> {{anuncio.usuario.name}} </h2>
@@ -55,42 +55,6 @@
                 </div><!-- !FINCARD =============================   -->
             </div>
 
-            <!-- ! MODAL DETALLE USUARIO ================================================ -->
-            <div class="container" *ngIf="ctrl_modal_detalles">
-                <div class="card card-anuncio-detalles">
-                    <button (click)="ctrl_modal_detalles = false" class="btn-icon align-self-start justify-self-end" style="z-index: 2;"><i class="icon icon-close"></i></button>
-                    
-                    <div class="card-anuncio-detalles-body">
-                        <div class="section-anuncio-detalles-img">
-                            <img src="../../../assets/imagenes/user_example.jpg" alt="">
-                        </div>
-    
-                        <div class="section-anuncio-detalles">
-                            <div class="grid align-content-start gap-10">
-                                <h1 class="font-600">Nataly Torres</h1>
-                                <h3 class="text-alert">23 años • Sevilla, España</h3>
-                            </div>
-
-                            <div class="grid align-content-start gap-10">
-                                <h4><span class="icon icon-mail"></span> natalytorres@gmail.com</h4>
-                                <h4><span class="icon icon-phone font-500"></span> +34  984 572 496</h4>
-                                <h4><span class="icon icon-brujula"></span> Busco: pareja</h4>
-                            </div>
-
-                            <p>Hola, seré directa. me gusta mucho las personas que son divertidas, que no necesitan que una excusa tonta para ligar. Si puedes ser esa persona dale like y conversamos! 😉</p>
-                        
-                            <div class="content-redes">
-                                <button> <img src="../../../assets/imagenes/cont_phone.png" alt=""> </button>
-                                <button> <img src="../../../assets/imagenes/cont_wts.png" alt=""> </button>
-                                <button> <img src="../../../assets/imagenes/cont_sms.png" alt=""> </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            
         </div>
 
 

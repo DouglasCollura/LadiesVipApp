@@ -2,13 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { SplashScreenStateService } from 'src/app/services/splash-screen-state.service';
-
+import { FacebookLogin } from '@capacitor-community/facebook-login';
+import { HttpClient } from '@angular/common/http';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 // ! SERVICIOS ============================================
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { GeoLocationService } from 'src/app/services/location/geo-location.service';
 import { GoogleService } from 'src/app/services/google/google.service';
 import { FacebookService } from 'src/app/services/facebook/facebook.service';
 import { ControlService } from 'src/app/services/control/control.service';
+import { Platform } from '@ionic/angular';
+
 // ! ASSETS ============================================
 declare var $: any;
 import { Vacio, VacioU, SoloLetra, SoloNumero } from '../../../assets/script/general';
@@ -31,10 +35,19 @@ export class SignupComponent implements OnInit {
         private splashScreenStateService: SplashScreenStateService,
         private SmsService:SmsService,
         private ControlService:ControlService,
-        private RecoverypassService:RecoverypassService
+        private RecoverypassService:RecoverypassService,
+        private platform:Platform,
+        private http:HttpClient,
+
         
     ) { 
+        this.initializeApp();
+    }
 
+    initializeApp() {
+        this.platform.ready().then(() => {
+          GoogleAuth.initialize()
+        })
     }
 
     ngOnInit() {
@@ -114,6 +127,7 @@ export class SignupComponent implements OnInit {
     edad:number=0;
     loading:boolean=false;
     canSignUp: boolean = false;
+    token=null;
 
     //? FILTROS==========================================================
     tipo_filtro:string="";
@@ -163,56 +177,82 @@ export class SignupComponent implements OnInit {
     //!================== REGISTRO Y LOGUEO DE CUENTAS ==============================
     
     //!registro con facebook
-    signUpFacebook() {
-        //inicia sesion facebook
-        this.FacebookService.FacebookAuth()
-            .then((res: any) => {
-                ///comprueba si el facebook trae correro
-                if (res.additionalUserInfo.profile.email != null || res.additionalUserInfo.profile.email != undefined) {
-                    this.usuario.tipo = 3;
-                    this.usuario.datos.nombre = res.additionalUserInfo.profile.name;
-                    this.usuario.datos.correo = res.additionalUserInfo.profile.email;
-                    ///valida si el email que entra para registro existe
-                    this.AuthService.ValEmail({ tipo: this.usuario.tipo, email: this.usuario.datos.correo })
-                        .then((valid) => {
-                            //si no existe puedes registrate
-                            if (valid.error) {
-                                this.fase = 1;
-                            }
-                            //si existe anuncia con alerta
-                            if (valid.success) {
-                                this.signInWithFB()
-                            }
-                        });
-                }
-            })
+    async signInFacebook(): Promise<void> {
+        this.error = 0;
+        const FACEBOOK_PERMISSIONS = [
+          'email',
+          'user_birthday',
+          'user_photos',
+          'user_gender',
+        ];
+    
+        const result = await FacebookLogin.login({
+          permissions: FACEBOOK_PERMISSIONS,
+        });
+        if (result && result.accessToken) {
+            this.token = result.accessToken;
+            console.log(result)
+            const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
+            this.http.get(url).subscribe( (res:any) => {
+                console.log("load")
+                console.log(res)
+                this.usuario.datos.correo = res.email;
+                this.usuario.tipo = 3;
+                this.AuthService.ValEmail({ tipo: this.usuario.tipo, email: this.usuario.datos.correo })
+                .then(email=>{
+                    if (email.success) {
+                        this.error = 5;
+                    }
+    
+                    if (email.error) {
+                        console.log(res)
+                        // this.usuario.datos.nombre=res.givenName;
+                        // this.usuario.datos.apellido=res.familyName;
+                        this.usuario.datos.correo=res.email;
+                        let fullname=res.name.split(" ");
+                        this.usuario.datos.nombre=fullname[0];
+                        if(fullname.length>1){
+                            this.usuario.datos.apellido= fullname[1];
+                        }
+                        this.fase = 2;
+                    }
+                })
+            });
+        }else{
+            this.logoutFacebook().then(()=>{
+                this.signInFacebook()
+            });
+        }
+    }
+    async logoutFacebook() {
+        await FacebookLogin.logout();
     }
 
     //!registro con google
-    signUpGoogle() {
-        //inicia sesion facebook
-        this.GoogleService.GoogleAuth()
-            .then((res: any) => {
-                console.log(res)
-                //comprueba si el facebook trae correro
-                if (res.additionalUserInfo.profile.email != null || res.additionalUserInfo.profile.email != undefined) {
-                    this.usuario.tipo = 2;
-                    this.usuario.datos.nombre = res.additionalUserInfo.profile.name;
-                    this.usuario.datos.correo = res.additionalUserInfo.profile.email;
-                    ///valida si el email que entra para registro existe
-                    this.AuthService.ValEmail({ tipo: this.usuario.tipo, email: this.usuario.datos.correo })
-                        .then((valid) => {
-                            //si no existe puedes registrate
-                            if (valid.error) {
-                                this.fase = 1;
-                            }
-                            //si existe anuncia con alerta
-                            if (valid.success) {
-                                this.signInWithGoogle()
-                            }
-                        });
-                }
+    async signInGoogle() {
+         this.error = 0;
+         GoogleAuth.signOut().then(()=>{
+            GoogleAuth.signIn().then(res=>{
+                console.log(res.email)
+                this.usuario.tipo = 2;
+                this.AuthService.ValEmail({ tipo: 2, email: res.email })
+                .then(email => {
+                    if (email.success) {
+                        this.error = 5;
+                    }
+    
+                    if (email.error) {
+                        console.log(res)
+                        this.usuario.datos.nombre=res.givenName;
+                        this.usuario.datos.apellido=res.familyName;
+                        this.usuario.datos.correo=res.email;
+                        this.fase = 2;
+                    }
+                });
+                
             })
+         })
+
     }
 
     SignUpSms(){

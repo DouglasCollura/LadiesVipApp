@@ -5,15 +5,72 @@
     </div>
 
     <div class="body">
-        <h4>Aquí podrás gestionar y crar tus negocios en Ladies VIP</h4>
+        <h4>Aquí podrás gestionar y crear tus negocios en Ladies VIP</h4>
 
         <button class="btn btn-create" (click)="openMCreate()" > <span>+</span> Crear negocio</button>
+
+        <span *ngIf="loading" class="icon icon-loading loading"></span>
+
+        <div class="section-negocio" *ngFor="let negocio of negocios">
+            <div class="img">
+                <img [src]="url+GetFirstPhoto(negocio)" alt="">
+            </div>
+
+            <div class="content">
+                <h3 class="font-600"> {{negocio.nombre}} </h3>
+
+                <h4 class="font-600"> <span class="icon icon-location"></span> {{negocio.estado}} </h4>
+            </div>
+
+            <div class="grid align-content-center">
+                <button class="btn" (click)="openMShow(negocio)" ><span class="icon icon-chevron-right"></span></button>
+            </div>
+        </div>
     </div>
 
 </div>
 
 
-<div class="temp-negocios" *ngIf="display_create">
+<div class="temp-negocios" *ngIf="display_show">
+    <div class="header">
+        <button class="btn" (click)="closeMShow()" > <span class="icon icon-chevron-left"></span> </button>
+        <h3 class="font-500 justify-self-center"> {{show_negocio.nombre}} </h3>
+
+        <div class=" justify-self-end" style="position: relative;">
+            <button class="btn" id="btnToggle" (click)="ToggleOptionTable()" > <span class="icon icon-dots-horizontal"></span> </button>
+            <div class="table-options" >
+                <button (click)="OpenUpdate()" > <i class="icon icon-square-edit"></i> Editar</button>
+                <button (click)="OpenDelete()"> <i class="icon icon-trash"></i> Eliminar negocio </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="body-show">
+        <div class="show-img">
+            <img [src]="showImage(show_negocio.images)" alt="">
+        </div>
+
+        <div class="content-show">
+            <h2 class="font-600">{{show_negocio.nombre}}</h2>
+
+            <h3> <span class="icon icon-location"></span> {{show_negocio.estado}}, {{show_negocio.pais}} </h3>
+            <h3> <span class="icon icon-phone"></span> +{{usuario.code_phone}} {{show_negocio.telefono}} </h3>
+
+            <h3>
+                {{
+                    show_negocio.descripcion
+                }}
+            </h3>
+
+            <button class="btn-primary">Ir a página <span class="icon icon-arrow-right"></span> </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ! CREAR -->
+<div class="temp-negocios" [hidden]="!display_create">
     <div class="header">
         <button class="btn" (click)="closeMCreate()" > <span class="icon icon-chevron-left"></span> </button>
         <h3 class="font-500 justify-self-center">Crear Negocio</h3>
@@ -44,12 +101,19 @@
 
             <div class="form-group">
                 <label for="">Categoría</label>
-                <button class="btn btn-block btn-select" (click)="display_interes = true"  > Selecciona una categoría <span class="icon icon-chevron-down" ></span> </button>
+                <button class="btn btn-block btn-select" (click)="display_interes = true"  >{{(servicios_name.length!=0)?servicios_name:'Selecciona una categoría'}} <span class="icon icon-chevron-down" ></span> </button>
             </div>
 
             <div class="form-group">
                 <label for="">WhatsApp (negocio)</label>
-                <input type="text" [(ngModel)]="negocio.p1.telefono" placeholder="+34" >
+                <input type="text"
+                    inputmode="numeric" 
+                    pattern="[-+]?[0-9]*[.,]?[0-9]+"
+                    [placeholder]="'+'+usuario.code_phone"
+                    [(ngModel)]="negocio.p1.telefono"
+                    (keypress)="SoloNumero($event)" 
+                    maxlength="14"
+                >
             </div>
 
             <div class="form-group">
@@ -64,12 +128,12 @@
 
             <button 
                 class=" btn-block"
-                (click)="FaseDos()"  
+                (click)="( !Vacio(negocio.p1)) && FaseDos()"  
                 [ngClass]="( Vacio(negocio.p1))?'btn-disable':'btn-primary'"
             >Siguiente</button>
         </div>
 
-        <div class="grid justify-content-start gap-10" *ngIf="fase == 2">
+        <div class="grid justify-content-start gap-10" [hidden]="fase != 2">
 
             <div class="form-group">
                 <label for="">Dirección</label>
@@ -100,57 +164,120 @@
             <div class="form-group">
                 <label for="">Coordenadas</label>
                 <div class="section-coords">
-                    <input type="text" placeholder="Latitud" [(ngModel)]="negocio.p2.latitud">
-                    <input type="text" placeholder="Longitud" [(ngModel)]="negocio.p2.longitud">
+                    <input type="text" readonly placeholder="Latitud" [(ngModel)]="negocio.p2.latitud">
+                    <input type="text" readonly placeholder="Longitud" [(ngModel)]="negocio.p2.longitud">
                 </div>
             </div>
 
-            <button class="btn-primary btn-block" (click)="fase = 3" >Siguiente</button>
+            <button class=" btn-block" 
+                *ngIf="fase == 2"
+                (click)="( !Vacio(negocio.p2)) && fase =3" 
+                [ngClass]="( Vacio(negocio.p2))?'btn-disable':'btn-primary'"
+                >Siguiente</button>
         </div>
 
         <div class="grid justify-content-start gap-10" *ngIf="fase == 3">
 
             <div class="group-img">
 
-                <div class="primary-img" (click)="CargarImagen()">
-                    <div *ngIf="!user_imagen_show[0]" class="content-more" >
+                <div class="primary-img" >
+                    <div *ngIf="!user_imagen_show[0]" (click)="CargarImagen()" class="content-more" >
                         <span>+</span>
                     </div>
-                    <img *ngIf="user_imagen_show[0]" [src]="user_imagen_show[0].img" alt="">
+                    <div class="delete" *ngIf="user_imagen_load[0]" (click)="DeleteImg(user_imagen_load[0],1)" >
+                        <span class="icon icon-close"></span>
+                    </div>
+
+                    <img id="show"  *ngIf="user_imagen_show[0] && !user_imagen_load[0]" [src]="user_imagen_show[0].img" alt="">
+                    <img id="load" *ngIf="user_imagen_show[0] && user_imagen_load[0]" [src]=" url + user_imagen_load[0]" alt="">
                 </div>
 
                 <div class="carrousel">
-                    <div class="content-img" (click)="CargarImagen()">
-                        <div *ngIf="!user_imagen_show[1]" class="content-more" >
+                    <div class="content-img" >
+                        <div *ngIf="!user_imagen_show[1]" (click)="CargarImagen()" class="content-more" >
                             <span>+</span>
                         </div>
-                        <img *ngIf="user_imagen_show[1]" [src]="user_imagen_show[1].img" alt="">
+                        <div class="delete" *ngIf="user_imagen_load[1]" (click)="DeleteImg(user_imagen_load[1],1)" >
+                            <span class="icon icon-close"></span>
+                        </div>
+
+                        <div class="delete" *ngIf="user_imagen_show[1] && !user_imagen_load[1]" (click)="DeleteImg(user_imagen_show[1],2)" >
+                            <span class="icon icon-close"></span>
+                        </div>
+
+                        <img *ngIf="user_imagen_show[1] && !user_imagen_load[1]" [src]="user_imagen_show[1].img" alt="">
+                    <img *ngIf="user_imagen_show[1] && user_imagen_load[1]" [src]=" url + user_imagen_load[1]" alt="">
+
                     </div>
-                    <div class="content-img" (click)="CargarImagen()">
-                        <div *ngIf="!user_imagen_show[2]" class="content-more" >
+                    <div class="content-img" >
+                        <div *ngIf="!user_imagen_show[2]" (click)="CargarImagen()" class="content-more" >
                             <span>+</span>
                         </div>
-                        <img *ngIf="user_imagen_show[2]" [src]="user_imagen_show[2].img" alt="">
+
+                        <div class="delete" *ngIf="user_imagen_load[2]"  (click)="DeleteImg(user_imagen_load[2],1)">
+                            <span class="icon icon-close"></span>
+                        </div>
+
+                        <div class="delete" *ngIf="user_imagen_show[2] && !user_imagen_load[2]" (click)="DeleteImg(user_imagen_show[2],2)" >
+                            <span class="icon icon-close"></span>
+                        </div>
+
+                        <img *ngIf="user_imagen_show[2] && !user_imagen_load[2]" [src]="user_imagen_show[2].img" alt="">
+                        <img *ngIf="user_imagen_show[2] && user_imagen_load[2]" [src]=" url + user_imagen_load[2]" alt="">
                     </div>
-                    <div class="content-img" (click)="CargarImagen()">
-                        <div *ngIf="!user_imagen_show[3]" class="content-more" >
+                    <div class="content-img">
+                        <div *ngIf="!user_imagen_show[3]"  (click)="CargarImagen()" class="content-more" >
                             <span>+</span>
                         </div>
-                        <img *ngIf="user_imagen_show[3]" [src]="user_imagen_show[3].img" alt="">
+                        
+                        <div class="delete" *ngIf="user_imagen_load[3]" (click)="DeleteImg(user_imagen_load[3],1)">
+                            <span class="icon icon-close"></span>
+                        </div>
+
+                        <div class="delete" *ngIf="user_imagen_show[3] && !user_imagen_load[3]" (click)="DeleteImg(user_imagen_show[3],2)" >
+                            <span class="icon icon-close"></span>
+                        </div>
+
+                        <img *ngIf="user_imagen_show[3] && !user_imagen_load[3]" [src]="user_imagen_show[3].img" alt="">
+                        <img *ngIf="user_imagen_show[3] &&  user_imagen_load[3]" [src]=" url + user_imagen_load[3]" alt="">
                     </div>
-                    <div class="content-img" (click)="CargarImagen()">
-                        <div *ngIf="!user_imagen_show[4]" class="content-more" >
+                    <div class="content-img">
+                        <div *ngIf="!user_imagen_show[4]"  (click)="CargarImagen()" class="content-more" >
                             <span>+</span>
                         </div>
-                        <img *ngIf="user_imagen_show[4]" [src]="user_imagen_show[4].img" alt="">
+                        <div class="delete" *ngIf="user_imagen_load[4]" >
+                            <span class="icon icon-close"></span>
+                        </div>
+                        <img *ngIf="user_imagen_show[4] && !user_imagen_load[4]" [src]="user_imagen_show[4].img" alt="">
+                        <img *ngIf="user_imagen_show[4] && user_imagen_load[4]" [src]=" url + user_imagen_load[4]" alt="">
+
                     </div>
                 </div>
 
             </div>
 
-            <button style="margin-top: 30px;" (click)="CrearNegocio()" class="btn-primary btn-block">Siguiente</button>
+            <button style="margin-top: 30px;" *ngIf="!is_update" (click)="CrearNegocio()" class="btn-primary btn-block">Siguiente</button>
+            <button style="margin-top: 30px;" *ngIf="is_update" (click)="UpdateNegocio()" class="btn-primary btn-block">Siguiente</button>
+            
         </div>
         
+    </div>
+</div>
+
+<div class="container" *ngIf="loading_global"> 
+    <span class="icon icon-loading loading"></span>
+</div>
+
+<div class="container fadeIn" *ngIf="display_delete"> 
+    <div class="card card-delete">
+        <span class="icon icon-trash"></span>
+
+        <h2 class="font-600">¿Estás seguro que deseas eliminar tu negocio ?</h2>
+
+        <h3>Al eliminar tu negocio se borrarán todos la información, fotos y demás de manera permanente y ya no podrá ser recuperada</h3>
+        
+        <button class="btn text-error" (click)="DeleteNegocio()" >Eliminar negocio</button>
+        <button class="btn" (click)="display_delete = false" >Cancelar</button>
     </div>
 </div>
 
@@ -162,7 +289,7 @@
 
             <h3 class=" justify-self-center text-center font-600">Categoría</h3>
 
-            <button class="btn justify-self-end" (click)="CerrarModal()" > <span class="icon icon-close"></span> </button>
+            <button class="btn justify-self-end" (click)="[CerrarModal(), JoinCategoria()]" > <span class="icon icon-close"></span> </button>
         </div>
 
 

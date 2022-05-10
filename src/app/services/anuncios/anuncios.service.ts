@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -11,6 +11,8 @@ export class AnunciosService {
         private http: HttpClient,
     ) { }
 
+
+    @Output() add_select: EventEmitter<any> = new EventEmitter();
     // url = environment.serverUrl;
     url = environment.serverUrl;
     token = localStorage.getItem('token');
