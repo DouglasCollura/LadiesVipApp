@@ -1,26 +1,45 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { MarketService } from 'src/app/services/market/market.service';
+import { AnunciosService } from 'src/app/services/anuncios/anuncios.service';
+import { Browser } from '@capacitor/browser';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { DomController, Gesture, GestureController } from '@ionic/angular';
+import {Location} from '@angular/common';
+import { UserService } from 'src/app/services/user/user.service';
+import { FavoritoService } from 'src/app/services/favorito/favorito.service';
+
 declare var $: any;
 
 @Component({
-    selector: 'app-market',
-    templateUrl: './market.component.html',
-    styleUrls: ['./market.component.scss'],
+    selector: 'app-show',
+    templateUrl: './show.component.html',
+    styleUrls: ['./show.component.scss'],
 })
-export class MarketComponent implements OnInit, AfterViewInit {
+export class ShowComponent implements OnInit, AfterViewInit  {
 
     constructor(
-        private MarketService:MarketService,
+        private AnunciosService: AnunciosService,
+        private callNumber: CallNumber,
         private gestureCtrl: GestureController,
-
+        private domCtrl: DomController,
+        private location: Location,
+        private UserService:UserService,
+        private FavoritoService:FavoritoService
     ) { }
 
-
     @ViewChildren("images", {read: ElementRef }) images: QueryList<ElementRef>;
+    loading:boolean=false;
 
-    ngOnInit() { }
+
+    ngOnInit() {
+        this.anuncioGes = this.AnunciosService.anuncio;
+        this.anuncio = this.AnunciosService.anuncio.anuncio;
+        console.log("anuncio")
+        console.log(this.anuncio)
+        this.urls_image = this.anuncio.urls.split(",");
+        this.premium=this.UserService.getPremium();
+     }
+
 
     async ngAfterViewInit() {
         this.GestionAnunciosX(this.images.toArray())
@@ -32,12 +51,13 @@ export class MarketComponent implements OnInit, AfterViewInit {
         })
     }
 
+
+    
     GestionAnunciosX(imagesArray) {
-        console.log(imagesArray.length)
         
         for (let i = 0; i < imagesArray.length; i++) {
             const images = imagesArray[i];
-            console.log(this.point_img)
+            this.point_img = i;
             const gesture = this.gestureCtrl.create({
                 el: images.nativeElement,
                 threshold: 5,
@@ -46,9 +66,11 @@ export class MarketComponent implements OnInit, AfterViewInit {
                 direction:'x',
                 gesturePriority:3,
                 onStart: ev =>{
+                    console.log(i);
                     this.point_img = i;
 
                     
+                    console.log(this.point_img)
                     if(ev.deltaX < 0){
                         if(imagesArray[i-1]){
                             imagesArray[i-1].nativeElement.style.display = 'none';
@@ -127,67 +149,57 @@ export class MarketComponent implements OnInit, AfterViewInit {
     }
 
 
-    //!DATA===========================================================================================================
-    //?CARGA=================================================================================
+    ToggleOptionTable() {
+        if ($(".table-optionsS").css("display") == 'grid') {
+            $(".table-optionsS").css("display", "none");
+        } else {
+            $(".table-optionsS").css("display", "grid");
+        }
+    }
 
-
-    //?GESTION=================================================================================
-    current:number= 0;
-    last:number=0;
-    data:any;
-    urls_img:any;
-    data_show:any=null;
-
-    //?CONTROL=================================================================================
-    display_market: boolean = true ;
-    display_res: boolean = false;
-    display_show:boolean=false;
-    
-    url = environment.server;
-    point_img = 0;
-
-    //!FUNCIONES===========================================================================================================
-
-    //?GESTION=================================================================================
-    
-    SelectCat(id:number){
-        this.MarketService.SearchNegocio(id).then(res=>{
+    Delete(){
+        this.loading = true;
+        $(".table-options").css("display", "none")
+        this.FavoritoService.DeleteFavorite(this.anuncioGes.id).then(res=>{
             console.log(res)
-            this.current = res.current_page;
-            this.last = res.last_page;
-            this.data = res.data;
-            this.display_market=false;
-            this.display_res=true;
+            location.href='/home/favorito'
+
         })
     }
-    
-    OpenShow(data:any){
-        this.data_show=data;
-        this.display_res= false;
-        this.display_show= true;
-        this.urls_img = data.images.split(",");
-        this.point_img = this.urls_img.length-1;
-        console.log(data)
+
+
+
+    //!DATA=====================================================================
+    //?CARGA===================================================================================
+    anuncio: any;
+    anuncioGes:any
+    urls_image: any = [];
+
+    //?GESTION===================================================================================
+
+    //?CONTROL===================================================================================
+    url = environment.server;
+    point_img = 0;
+    premium: boolean = false;
+    alert: number = 0;
+
+
+
+    GoToBrowser(){
+        if(this.premium){
+            Browser.open({ url: 'https://api.whatsapp.com/send?phone='+this.anuncio.usuario.code_phone+this.anuncio.usuario.telefono });
+        }else{
+            this.alert = 1;
+        }        
     }
 
-    //?CONTROL=================================================================================
-
-    GetImg(img:any){
-        let urls_img = img.split(",");
-        return urls_img[0]
+    GoToCall(){
+        if(this.premium){
+            this.callNumber.callNumber(this.anuncio.usuario.code_phone+this.anuncio.usuario.telefono, true);
+        }else{
+            this.alert = 1;
+        }
     }
 
-    CloseRes(){
-        this.current = 0;
-        this.last = 0;
-        this.data = null;
-        this.display_market= true;
-        this.display_res=false;
-    }
-
-    CloseShow(){
-        this.display_res= true;
-        this.display_show=false;
-    }
 
 }

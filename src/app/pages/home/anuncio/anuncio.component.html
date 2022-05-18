@@ -47,3 +47,16 @@
     </div>
 
 </div>
+<div class="container alert" *ngIf="alert == 1">
+
+    <div class="content">
+        <button class="btn close" (click)="alert = 0" ><span class="icon icon-close"></span></button>
+
+        <h1>¡Se premium!</h1>
+
+        <h4>Actualmente cuentas con un plan free, para enviar mensajes, pulsa el botón y adquiere un plan</h4>
+
+        <button class="btn premium" routerLink="../config/planes">Ser premium</button>
+    </div>
+
+</div>

@@ -4,6 +4,8 @@ import { AnunciosService } from 'src/app/services/anuncios/anuncios.service';
 import { environment } from 'src/environments/environment';
 import { SplashScreenStateService } from 'src/app/services/splash-screen-state.service';
 import { ControlService } from 'src/app/services/control/control.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -18,15 +20,41 @@ export class AnuncioComponent implements OnInit {
     constructor(
         private AnunciosService:AnunciosService,
         private splashScreenStateService: SplashScreenStateService,
-        private ControlService:ControlService
+        private ControlService:ControlService,
+        private UserService:UserService,
+        private router: Router,
 
     ) { }
 
     ngOnInit() {
+
+        this.datos = JSON.parse(localStorage.getItem("usuario"))
+
+        this.mypack = JSON.parse(localStorage.getItem("pack"))
+        console.log(this.mypack)
+
+        if(this.mypack.pack == 1){
+            this.myboost = "boost-standar.png"
+            this.mycolor = "#567BFF"
+        }
+        if(this.mypack.pack == 2){
+            this.myboost = "boost-plus.png"
+            this.mycolor = "#EBA046"
+        }
+        if(this.mypack.pack == 3){
+            this.myboost = "boost-extra.png"
+            this.mycolor = "#29C56D"
+        }
+        if(this.mypack.pack == 4){
+            this.myboost = "boost-carrusel.png"
+            this.mycolor = "#567BFF"
+        }
         if(this.AnunciosService.anuncio){
             this.PrepararAnuncio(this.AnunciosService.anuncio)
+        }else{
+            this.myboost = "Boost.png"
+            this.isFirstAdd = true;
         }
-        this.datos = JSON.parse(localStorage.getItem("usuario"))
     }
 
     //!DATA===========================================================================================================
@@ -63,6 +91,10 @@ export class AnuncioComponent implements OnInit {
     blur:boolean=false;
     update:boolean=false;
     fase_update=0;
+    mypack:any=null;
+    myboost:any=null;
+    mycolor:any=null;
+    reno:boolean=false;
     //!FUNCIONES===========================================================================================================
 
 
@@ -102,12 +134,10 @@ export class AnuncioComponent implements OnInit {
             let blob = await fetch(res.webPath).then(r => r.blob());
             const reader = new FileReader();
             reader.onload = (e: any) => {
-                this.user_imagen_show.push({img:e.target.result, id:this.img_length+1});
+                this.user_imagen_show.push({img:e.target.result, id:this.img_length+1,blob:blob});
             }
             reader.readAsDataURL(blob);
-            this.img_length+=1;
-
-            this.formData.append("imagen"+this.img_length, blob);
+            this.img_length = this.img_length+1;
             
         });
  
@@ -115,32 +145,70 @@ export class AnuncioComponent implements OnInit {
 
     CrearAnuncio(){
         this.anuncio.intereses = this.ctrl_intereses.join();
+
+        this.img_length = 0;
+        this.user_imagen_show.forEach((car: any, index: any, object: any) => {
+            if(car.blob){
+                this.img_length+=1;
+                this.formData.append("imagen"+this.img_length, car.blob);
+            }
+        })
         this.formData.append("length", ""+this.img_length);
         this.formData.append("anuncio",JSON.stringify(this.anuncio))
         this.loading= true;
+
         this.AnunciosService.CrearAnuncio(this.formData).then(()=>{
             this.loading= false;
             this.done = true;
+            location.href='/home'
+
         })
     }
 
     UpdateAnuncio(){
         this.anuncio.intereses = this.ctrl_intereses.join();
+        
+        this.img_length = 0;
+        this.user_imagen_show.forEach((car: any, index: any, object: any) => {
+            if(car.blob){
+                this.img_length+=1;
+                this.formData.append("imagen"+this.img_length, car.blob);
+            }
+        })
         this.formData.append("length", ""+this.img_length);
         this.formData.append("anuncio",JSON.stringify(this.anuncio))
         this.formData.append("img_delete",JSON.stringify(this.urls_delete))
         this.fase_update = 1;
         this.AnunciosService.UpdateAnuncio(this.formData,this.id).then((res)=>{
 
-            this.fase_update = 2;
-            
-            setTimeout(()=>{
-                this.fase_update = 0;
-                this.update=false;
-                this.blur = false;
-            }, 1000)
+            if(res.error){
+                console.log("te jo")
+            }else{
+                this.UserService.ValidatePack().then(res=>{
+                    console.log(this.UserService.getPack());
+                    this.UserService.ValidatePack().then((res:any)=>{
 
+                        localStorage.removeItem('pack')
             
+                        if(res.anuncios){
+                            localStorage.setItem('pack',JSON.stringify(res) )
+                        }
+
+                        this.fase_update = 2;
+                        location.href='/home'
+                        setTimeout(()=>{
+                            this.fase_update = 0;
+                            this.update=false;
+                            this.blur = false;
+
+                        }, 1000)
+
+                        
+                        
+                    })
+                });
+                
+            }
             console.log(res)
         })
     }
@@ -174,10 +242,9 @@ export class AnuncioComponent implements OnInit {
             });
         }else{
             this.user_imagen_show.forEach((car: any, index: any, object: any) => {
-    
+                
                 if (car.id == img.id) {
                     object.splice(index, 1);
-                    this.formData.delete("imagen"+img);
                 }
             });
         }
@@ -226,8 +293,11 @@ export class AnuncioComponent implements OnInit {
     }
 
     checkUpdate(){
-        this.blur=true; 
-        this.update=true;
+        if(this.mypack.boosts == 0){
+            this.reno = true;
+        }else{
+            this.update=true;
+        }
     }
 
     closeUpdate(){

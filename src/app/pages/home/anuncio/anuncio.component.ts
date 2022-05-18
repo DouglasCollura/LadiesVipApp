@@ -5,6 +5,8 @@ import { Browser } from '@capacitor/browser';
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { DomController, Gesture, GestureController } from '@ionic/angular';
 import {Location} from '@angular/common';
+import { UserService } from 'src/app/services/user/user.service';
+
 declare var $: any;
 
 @Component({
@@ -19,7 +21,8 @@ export class AnuncioComponent implements OnInit, AfterViewInit {
         private callNumber: CallNumber,
         private gestureCtrl: GestureController,
         private domCtrl: DomController,
-        private location: Location
+        private location: Location,
+        private UserService:UserService
     ) { }
     
     @ViewChildren("images", {read: ElementRef }) images: QueryList<ElementRef>;
@@ -27,6 +30,7 @@ export class AnuncioComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.anuncio = this.AnunciosService.anuncio;
         this.urls_image = this.anuncio.urls.split(",");
+        this.premium=this.UserService.getPremium();
     }
 
 
@@ -146,7 +150,10 @@ export class AnuncioComponent implements OnInit, AfterViewInit {
     //?CONTROL===================================================================================
     url = environment.server;
     point_img = 0;
+    premium:boolean=false;
+    alert:number=0;
 
+    
     GetUrls(urls:any){
         return urls.split(",");
     }
@@ -182,12 +189,19 @@ export class AnuncioComponent implements OnInit, AfterViewInit {
     }
 
     GoToBrowser(){
-
-        Browser.open({ url: 'https://api.whatsapp.com/send?phone='+this.anuncio.usuario.code_phone+this.anuncio.usuario.telefono });
+        if(this.premium){
+            Browser.open({ url: 'https://api.whatsapp.com/send?phone='+this.anuncio.usuario.code_phone+this.anuncio.usuario.telefono });
+        }else{
+            this.alert = 1;
+        }        
     }
 
     GoToCall(){
-        this.callNumber.callNumber(this.anuncio.usuario.code_phone+this.anuncio.usuario.telefono, true);
+        if(this.premium){
+            this.callNumber.callNumber(this.anuncio.usuario.code_phone+this.anuncio.usuario.telefono, true);
+        }else{
+            this.alert = 1;
+        }
     }
 
 

@@ -11,19 +11,19 @@
 
                 <div class="center">
 
-                    <div class="content-img-popular">
+                    <div class="content-img-popular" (click)="OpenAnuncioPopular()" >
                         <img src="../../../assets/img/user_example.jpg" alt="">
                     </div>
 
-                    <div class="content-img-popular">
+                    <div class="content-img-popular" (click)="OpenAnuncioPopular()">
                         <img src="../../../assets/img/user_example.jpg" alt="">
                     </div>
 
-                    <div class="content-img-popular">
+                    <div class="content-img-popular" (click)="OpenAnuncioPopular()">
                         <img src="../../../assets/img/user_example.jpg" alt="">
                     </div>
 
-                    <div class="content-img-popular">
+                    <div class="content-img-popular" (click)="OpenAnuncioPopular()">
                         <img src="../../../assets/img/user_example.jpg" alt="">
                     </div>  
                     <button class="btn btn-filtro"><span class="icon icon-filtro"></span></button>
@@ -44,7 +44,7 @@
                     <div class="card-anuncio-info">
                         <div class="content-btn">
                             <button (click)="cardDiss('card'+i)"> <img src="../../../assets/img/anuncio_close.svg" alt=""> </button>
-                            <button (click)="cardFav('card'+i)"> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
+                            <button (click)="cardFav('card'+i,anuncio)"> <img src="../../../assets/img/anuncio_start.svg" alt=""> </button>
                             <button (click)="cardCheck('card'+i)"> <img src="../../../assets/img/anuncio_check.svg" alt=""> </button>
                         </div>
                         <div class="grid align-self-center justify-items-center gap-10">
@@ -73,6 +73,25 @@
             <button [class]="ctrl_menu == 2?'active':''" id="message" (click)="nav(2)"><span class="icon icon-message" ></span></button>
             <button [class]="ctrl_menu == 3?'active':''" id="notificacion" (click)="nav(3)"><span class="icon icon-bell"></span></button>
             <button [class]="ctrl_menu == 4?'active':''" id="perfil" (click)="nav(4)"><span class="icon icon-profile"></span></button>
+    </div>
+
+</div>
+
+
+<div class="container alert" *ngIf="alert == 1">
+
+    <div class="content">
+        <button class="btn close" (click)="alert = 0" ><span class="icon icon-close"></span></button>
+
+        <div class="content-img-popular" (click)="OpenAnuncioPopular()" >
+            <img src="../../../assets/img/user_example.jpg" alt="">
+        </div>
+
+        <h1>¿Quieres conocer a este usuario?</h1>
+
+        <h4>Se parte de los usuarios premium en Ladies VIP</h4>
+
+        <button class="btn premium" routerLink="config/planes">Ser premium</button>
     </div>
 
 </div>

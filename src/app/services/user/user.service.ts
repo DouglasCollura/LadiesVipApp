@@ -13,7 +13,25 @@ export class UserService {
 
     url = environment.serverUrl;
     token = localStorage.getItem('token');
+    private premium:boolean=false;
 
+    private actual_pack:any=null;
+
+    getPremium(){
+        return this.premium;
+    }
+    setPremium(is:boolean){
+        this.premium = is;
+    }
+
+    getPack(){
+        return this.actual_pack;
+    }
+    setPack(){
+        this.ValidatePremium().then(res=>{
+            this.actual_pack =res;
+        })
+    }
 
     UpdateUser(datos:any): Promise<any> {
         const headers = new HttpHeaders({
@@ -28,6 +46,27 @@ export class UserService {
             Authorization: 'Bearer ' + localStorage.getItem('token')
         });
         const send = this.http.post(`${this.url}update-info`, datos , {headers}).toPromise()
+        return send;
+    }
+
+
+    ValidatePremium(): Promise<any> {
+        const headers = new HttpHeaders({
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        });
+        const send = this.http.get(`${this.url}validate-premium`,{headers}).toPromise()
+        return send;
+    }
+
+
+    ValidatePack(){
+        const headers = new HttpHeaders({
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        });
+        const send = this.http.get(`${this.url}validate-pack`, {headers}).toPromise().then(res=>{
+            this.actual_pack = res;
+            return res
+        })
         return send;
     }
     

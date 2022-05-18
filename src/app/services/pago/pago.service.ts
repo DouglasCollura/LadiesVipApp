@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +32,27 @@ export class PagoService {
     SetTitle(tipo:number){
         this.tipo = tipo;
         this.change.emit({tipo:this.tipo});
+    }
+
+    Pagar(data:any){
+        const send = this.http.post(`https://ladies-vip.herokuapp.com/pay`,  data ).toPromise()
+        return send;
+    }
+
+    UpdatePack(data:any){
+        const headers = new HttpHeaders({
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        });
+        const send = this.http.post(`${this.url}update-paquete`,  data , {headers}).toPromise()
+        return send;
+    }
+
+    UpdatePackPaypal(data:any){
+        const headers = new HttpHeaders({
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        });
+        const send = this.http.post(`${this.url}update-paquete-paypal`,  data , {headers}).toPromise()
+        return send;
     }
 
 

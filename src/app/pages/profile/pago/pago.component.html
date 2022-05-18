@@ -78,7 +78,7 @@
 
         </div>
 
-        <div class="card-pack-reno" *ngIf="tipo == 4">
+        <div class="card-pack-reno" *ngIf="tipo >= 4 && tipo < 8">
             <img src="../../../../assets/img/diamont-pack.png" alt="">
 
             <div class="card-pack-top">
@@ -87,12 +87,54 @@
 
             <div class="card-pack-body">
 
-                <h3>1 renovación (xmes): <span class="font-600"> 0.99 EUR </span> </h3>
-                <h3>10 renovación (xmes): <span class="font-600"> 6.99 EUR </span> </h3>
-                <h3>30 renovación (xmes): <span class="font-600"> 19.99 EUR </span> </h3>
-                <h3>1 video (xmes): <span class="font-600"> 2.99 EUR </span> </h3>
+                <div class="radio-group">
+                    <input type="radio" (click)="tipo=4" checked name="reno" id="tipo1">
+                    <label for="tipo1">1 renovación (xmes): <span class="font-600"> 0.99 EUR </span> </label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" (click)="tipo=5" name="reno" id="tipo2" >
+                    <label for="tipo2">10 renovación (xmes): <span class="font-600"> 6.99 EUR </span> </label >
+                </div>
+                
+                <div class="radio-group">
+                    <input type="radio" (click)="tipo=6" name="reno" id="tipo3" >
+                    <label for="tipo3">30 renovación (xmes): <span class="font-600"> 19.99 EUR </span> </label>
+                </div>
+
+                <div class="radio-group">
+                    <input type="radio" (click)="tipo=7" name="reno" id="tipo5" >
+                    <label for="tipo5">1 video (xmes): <span class="font-600"> 2.99 EUR </span> </label>
+                </div>
             </div>
 
+        </div>
+
+        
+        <div class="card_plan_premium" *ngIf="tipo == 8">
+            <div class="price justify-self-end">
+                <h1 >$ 8.99</h1>
+                <span>/mes</span>
+            </div>
+
+            <div class="content"> 
+                <h1 class="font-600">Plan premium</h1>
+
+                <div class="sections">
+                    <span class="icon icon-circle-check"></span>                        
+                    <p>Acceso a  todos los contenidos disponibles de los anuncios</p>
+
+                    <span class="icon icon-circle-check"></span>                        
+                    <p>Acceso ilimitado a todos los perfiles</p>
+
+                    <span class="icon icon-circle-check"></span>                        
+                    <p>Puedes guardar a anunciantes</p>
+
+                    <span class="icon icon-circle-check"></span>                        
+                    <p>Enviar y recibir mensajes de otros usuarios</p>
+                </div>
+
+
+            </div>
         </div>
 
         <div class="section-pago">
@@ -114,8 +156,14 @@
 
     </div>
 
-    <div class="body " style="align-content: stretch;" [hidden]="fase_pago != 1">
-        <!-- <h4>Escoger un método de pago</h4> -->
+    <div class="body pago" style="align-content: stretch;" [hidden]="fase_pago != 1">
+        
+        <div class="total">
+            <h4>Total a pagar</h4>
+
+            <h1>$ {{mount}} </h1>
+        </div>
+
 
         <!-- <div class="metodo-pago">
             <div class="card-method">
@@ -125,53 +173,99 @@
                 <img src="../../../../assets/img/visa.png" alt="">
             </div>
         </div> -->
-        <!-- <div class="form-pago">
+        <div class="form-pago" [hidden]="metodo_pago != 1">
             
             <div class="form-group">
-                <label for="">Número de tarjeta</label>
-                <input type="text">
+                <label for="">Número de tarjetas</label>
+                <input 
+                    type="text"
+                    maxlength="16"  
+                    inputmode="numeric" 
+                    pattern="[-+]?[0-9]*[.,]?[0-9]+"
+                    placeholder="Ingresar número"
+                    (keypress)="SoloNumero($event)" 
+                    [(ngModel)]="card.number"
+                >
             </div>
 
             <div class="grid gc-2x-g gap-10">
                 
-                <div class="form-group">
-                    <label for="">Válido hasta</label>
-                    <input type="text" placeholder="Mes/año">
+                <div class="grid gc-2x-g gap-10">
+                    <div class="form-group">
+                        <label for="">Mes</label>
+                        
+                        <input 
+                            type="text" 
+                            placeholder="Mes"
+                            (keypress)="SoloNumero($event)" 
+                            maxlength="2"  
+                            inputmode="numeric" 
+                            pattern="[-+]?[0-9]*[.,]?[0-9]+"
+                            [(ngModel)]="card.exp_month"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="">Año</label>
+                        <input 
+                            type="text" 
+                            placeholder="Año"
+                            (keypress)="SoloNumero($event)" 
+                            maxlength="2"  
+                            inputmode="numeric" 
+                            pattern="[-+]?[0-9]*[.,]?[0-9]+"
+                            [(ngModel)]="card.exp_year"
+                        >
+                    </div>
                 </div>
+                
 
                 <div class="form-group">
                     <label for="">CVV</label>
-                    <input type="text">
+                    <input 
+                        type="text"
+                        (keypress)="SoloNumero($event)" 
+                        maxlength="3"  
+                        inputmode="numeric" 
+                        pattern="[-+]?[0-9]*[.,]?[0-9]+"
+                        [(ngModel)]="card.cvc"
+                    >
                 </div>
 
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="">Propietari@</label>
-                <input type="text" placeholder="Nombre del titular">
-            </div>
+                <input type="text" (keypress)="SoloLetra($event)" placeholder="Nombre del titular">
+            </div> -->
 
             <div class="checkbox-group">
                 <label for="">Guardar datos para futuros pagos</label>
                 <input type="checkbox" class="check-button">
             </div>
-        </div> -->
-        <div class="align-self-center">
+        </div>
+        
+        <h3 class="text-error" *ngIf="error">Complete todos los campos o verifique sus datos.</h3>
+        
+        <!-- <div class="align-self-center">
             <div id="card" [hidden]="metodo_pago != 1" >
 
             </div>
     
-            <div id="paypal" [hidden]="metodo_pago != 0">
+            
+        </div> -->
+
+        <div id="paypal" [hidden]="metodo_pago != 0">
     
-            </div>
         </div>
 
-
-
-        <button class="btn-primary btn-block" (click)="go()">Confirmar pago</button>
+        <button 
+            class=" btn-block" 
+            [ngClass]="!(VacioU(card.number) || VacioU(card.exp_month) || VacioU(card.exp_year) || VacioU(card.cvc) )? 'btn-primary':'btn-disable' "
+            (click)=" !(VacioU(card.number) || VacioU(card.exp_month) || VacioU(card.exp_year) || VacioU(card.cvc) ) && go()"
+        >Confirmar pago <span *ngIf="loading" class="icon icon-loader"></span> </button>
 
     </div>
-
+    
 
     <div class="body" *ngIf="fase_pago == 2">
 
@@ -209,4 +303,22 @@
 
     </div>
 
+</div>
+
+<div class="done" *ngIf="fase_pago == 3">
+    
+    <div class="content">
+        <img src="../../../../assets/img/checkpay.png" alt="">
+
+        <h1>Pago realizado!</h1>
+
+        <h3>Tienes un mes gratuito en el pack de anuncios Standard</h3>
+    </div>
+
+    <button class="btn-secondary" (click)="goHome()" >Ir a home</button>
+
+</div>
+
+<div class="container" *ngIf="loading"> 
+    <span class="icon icon-loading loading"></span>
 </div>

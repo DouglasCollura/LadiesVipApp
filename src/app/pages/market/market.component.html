@@ -36,22 +36,22 @@
     <div class="market-section-categorias">
         <h5>CATEGORÍAS</h5>
 
-        <div class="card-categorias">
+        <div class="card-categorias" (click)="SelectCat(0)">
             <h4>MASAJES ERÓTICOS</h4>
             <img src="../../../assets/img/categoria_example.jpg" alt="">
         </div>
 
-        <div class="card-categorias">
+        <div class="card-categorias" (click)="SelectCat(1)">
             <h4>JUGUETES SEXUALES</h4>
             <img src="../../../assets/img/anuncio_example.jpg" alt="">
         </div>
 
-        <div class="card-categorias">
+        <div class="card-categorias"  (click)="SelectCat(3)">
             <h4>AGENCIA MATRIMONIAL</h4>
             <img src="../../../assets/img/categoria_example3.jpg" alt="">
         </div>
 
-        <div class="card-categorias">
+        <div class="card-categorias"  (click)="SelectCat(2)">
             <h4>ESPACIOS SEXUALES</h4>
             <img src="../../../assets/img/categoria_example4.jpg" alt="">
         </div>
@@ -62,7 +62,7 @@
 
 <div *ngIf="display_res" class="temp-res">
     <div class="header">
-        <button class="btn" routerLink=".."> <span class="icon icon-chevron-left"></span> </button>
+        <button class="btn" (click)="CloseRes()" > <span class="icon icon-chevron-left"></span> </button>
         <h3 class="font-500 justify-self-center">Masajes eróticos</h3>
     </div>
 
@@ -72,15 +72,15 @@
             <input type="text" placeholder="Buscar">
         </div>
 
-        <div class="section-negocio">
+        <div class="section-negocio" *ngFor="let item of data" (click)="OpenShow(item)" >
             <div class="img">
-                <img src="../../../assets/img/anuncio_example.jpg" alt="">
+                <img [src]="url+GetImg(item.images)" alt="">
             </div>
 
             <div class="content">
-                <h3 class="font-600">Nombre del negocio</h3>
+                <h3 class="font-600"> {{item.nombre}} </h3>
 
-                <h4 class="font-600"> <span class="icon icon-location"></span> Sevilla </h4>
+                <h4 class="font-600"> <span class="icon icon-location"></span> {{item.ciudad}} </h4>
             </div>
 
             <div class="grid align-content-center">
@@ -88,21 +88,34 @@
             </div>
         </div>
 
-        <div class="section-negocio">
-            <div class="img">
-                <img src="../../../assets/img/anuncio_example.jpg" alt="">
-            </div>
+    </div>
 
-            <div class="content">
-                <h3 class="font-600">Nombre del negocio</h3>
+</div>
 
-                <h4 class="font-600"> <span class="icon icon-location"></span> Sevilla </h4>
-            </div>
 
-            <div class="grid align-content-center">
-                <button class="btn"><span class="icon icon-chevron-right"></span></button>
-            </div>
+<div class="temp-show" *ngIf="display_show">
+    <button class="btn return" (click)="CloseShow()" > <span class="icon icon-chevron-left"></span> </button>
+    <div class="show-img">
+        <img #images  [src]="url+urls" *ngFor="let urls of urls_img.slice().reverse(); let i = index" alt="">
+
+        <div class="points-group">
+            <!-- <div class="point-active"></div> -->
+            <div [id]="i" [ngClass]="point_img == i? 'point-active':'point'" *ngFor="let urls of urls_img; let i = index"></div>
         </div>
     </div>
 
+    <div class="content-show">
+        <h2 class="font-600"> {{data_show.nombre}} </h2>
+
+        <h3> <span class="icon icon-location"></span> {{data_show.estado}}, {{data_show.pais}} </h3>
+        <h3> <span class="icon icon-phone"></span> +{{data_show.code_phone}} {{data_show.telefono}} </h3>
+
+        <h3>
+            {{
+                data_show.descripcion
+            }}
+        </h3>
+
+        <button class="btn-primary">Ir a página <span class="icon icon-arrow-right"></span> </button>
+    </div>
 </div>

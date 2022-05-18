@@ -5,7 +5,7 @@
         <button class="btn" routerLink="../.."> <span class="icon icon-chevron-left"></span> </button>
         <h3 class="font-500 justify-self-center">Crear anuncio</h3>
 
-        <button class="btn" (click)="checkUpdate()"> <img src="../../../../assets/img/Boost.png"  alt=""> </button>
+        <button class="btn" (click)="(!isFirstAdd)&&checkUpdate()"> <img [src]="'../../../../assets/img/'+myboost"  alt=""> </button>
 
     </div>
     <div class="body " [ngClass]="blur?'blur':''" >
@@ -39,7 +39,7 @@
                 </div>
 
     
-                <div class="more" (click)="CargarImagen()">
+                <div class="more" *ngIf=" (urls_image.length+ user_imagen_show.length) <10" (click)="CargarImagen()">
                     <span class="icon icon-circle-more"></span>
                     <p>Tienes un máximo de 10 fotos</p>
                 </div>
@@ -192,15 +192,30 @@
         <button class="btn close" (click)="closeUpdate()">X</button>
 
         <div class="grid align-content-start gap-20 justify-items-center">
-            <img *ngIf="fase_update < 2" [class]="fase_update == 1? 'loading':''" src="../../../../assets/img/Boost.png" alt="">
+            <img *ngIf="fase_update < 2" [class]="fase_update == 1? 'loading':''" [src]="'../../../../assets/img/'+myboost" alt="">
             <img *ngIf="fase_update == 2" src="../../../../assets/img/boost-check.png" alt="">
             <h4 *ngIf="fase_update == 2" >Boost exitoso!</h4>
             <h2 *ngIf="fase_update == 0">Hacer un boost!</h2>
-            <h4 *ngIf="fase_update == 0">Te quedan 4 renovaciones (boost). Presiona el botón para continuar</h4>     
+            <h4 *ngIf="fase_update == 0">Te quedan {{mypack.boosts}} renovaciones (boost). Presiona el botón para continuar</h4>     
             
-            <button class="btn boost" *ngIf="fase_update == 0" (click)="UpdateAnuncio()">Hacer boost</button>
+            <button class="btn boost" [style]="'color:'+mycolor+' !important'" *ngIf="fase_update == 0" (click)="UpdateAnuncio()">Hacer boost</button>
         </div>
         
     </div>
 
+</div>
+
+<div class="container" *ngIf="reno">
+    <div class="card-boost">
+        <button class="btn close" (click)="reno = false">X</button>
+
+        <div class="grid align-content-start gap-20 justify-items-center">
+            <img [src]="'../../../../assets/img/'+myboost" alt="">
+            <h2>Sin boost!</h2>
+            <h4 >Se terminaron las renovaciones que tenías en esta promo. Actualiza y sigue disfrutando</h4>
+            
+            <button class="btn boost" routerLink="../packs_anuncios" [style]="'color:'+mycolor+' !important'" >Renovar</button>
+        </div>
+        
+    </div> 
 </div>

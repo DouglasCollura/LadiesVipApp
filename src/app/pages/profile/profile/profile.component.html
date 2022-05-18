@@ -15,21 +15,26 @@
             </div>       
             
             <div class="gestion">
-                <button>
+                <button *ngIf="!premium" routerLink="config/planes" >
                     <img  src="../../../../assets/img/be-premium.png" alt="">
                     SER PREMIUM
                 </button>
 
-                <button routerLink="config/anuncio" >
-                    <img  src="../../../../assets/img/create-ads.png" alt="">
+                <button routerLink="config/anuncio" *ngIf="mypack != null">
+                    <img  [src]="'../../../../assets/img/'+img_pack" alt="">
                     <span *ngIf="!myadd"> CREAR ANUNCIO</span>
-                <span *ngIf="myadd"> EDITAR ANUNCIO</span>
+                    <span *ngIf="myadd"> EDITAR ANUNCIO</span>
+                </button>
+
+                <button routerLink="config/packs_anuncios" *ngIf="mypack == null" >
+                    <img  [src]="'../../../../assets/img/pack-add-standar.png'" alt="">
+                    <span > CREAR ANUNCIO</span>
                 </button>
             </div>
 
         </div>
 
-        <button id="favoritos" class="btn"> <span class="icon icon-start"></span> </button>
+        <button id="favoritos" (click)="Gofavorito()" class="btn"> <span class="icon icon-start"></span> </button>
 
     </div>
 
@@ -54,5 +59,7 @@
     </div>
 
 </div>
-
+<div class="container" *ngIf="loading"> 
+    <span class="icon icon-loading loading"></span>
+</div>
 <!-- <app-config *ngIf="false"></app-config> -->

@@ -1,0 +1,82 @@
+<div class="temp-planes">
+    <div class="header">
+        <button class="btn" routerLink=".."> <span class="icon icon-chevron-left"></span> </button>
+        <h2 class="font-500 justify-self-center"> Planes </h2>
+    </div>
+
+    <div class="body">
+
+        <div class="free" *ngIf="!premium">
+            <div class="plan">
+                <h2 class="font-600">Ladies VIP * free</h2>
+
+                <h5>PLAN ACTUAL</h5>
+            </div>
+
+            <h4>¿Por qué elegir el ser premium?</h4>
+
+            <div class="card_plan_premium">
+                <div class="price justify-self-end">
+                    <h1 >$ 8.99</h1>
+                    <span>/mes</span>
+                </div>
+
+                <div class="content"> 
+                    <h1 class="font-600">Plan premium</h1>
+
+                    <div class="sections">
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Acceso a  todos los contenidos disponibles de los anuncios</p>
+
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Acceso ilimitado a todos los perfiles</p>
+
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Puedes guardar a anunciantes</p>
+
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Enviar y recibir mensajes de otros usuarios</p>
+                    </div>
+
+                    <button class="btn btn-adquirir" (click)="GoPago()" >Adquirir plan</button>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="premium" *ngIf="premium">
+
+            <div class="card_plan_premium">
+                <div class="justify-self-end">
+                    <h5 class="font-500">PLAN ACTUAL</h5>
+                </div>
+
+                <div class="content"> 
+                    <h1 class="font-600">Plan premium</h1>
+
+                    <div class="sections">
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Acceso a  todos los contenidos disponibles de los anuncios</p>
+
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Acceso ilimitado a todos los perfiles</p>
+
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Puedes guardar a anunciantes</p>
+
+                        <span class="icon icon-circle-check"></span>                        
+                        <p>Enviar y recibir mensajes de otros usuarios</p>
+                    </div>
+
+                    <button class="btn btn-adquirir" (click)="GoPago()" >Renovar</button>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

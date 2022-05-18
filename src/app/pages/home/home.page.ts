@@ -6,6 +6,9 @@ import { DomController, Gesture, GestureController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { NavController, Platform } from "@ionic/angular";
+import { UserService } from 'src/app/services/user/user.service';
+import { PagoService } from 'src/app/services/pago/pago.service';
+import { FavoritoService } from 'src/app/services/favorito/favorito.service';
 
 // ! ASSETS ============================================
 declare var $: any;
@@ -25,11 +28,15 @@ export class HomePage implements OnInit, AfterViewInit {
         private domCtrl: DomController,
         private router: Router,
         public navCtrl: NavController, 
-        public platform: Platform
+        public platform: Platform,
+        public UserService:UserService,
+        private PagoService:PagoService,
+        private FavoritoService:FavoritoService
     ) {
         this.platform.backButton.subscribeWithPriority(10, () => {
             console.log('Handler was called!');
         });
+        
 
     }
 
@@ -51,6 +58,35 @@ export class HomePage implements OnInit, AfterViewInit {
 
     async ngOnInit() {
         this.GetAnuncios();
+        this.UserService.ValidatePremium().then(res=>{
+            if(res[0]){
+                console.log(res[0])
+                this.UserService.setPremium(true);
+                this.premium = true;
+            }
+        })
+
+        this.AnunciosService.GetMyAdd().then(res=>{
+            if(localStorage.getItem('myadd')){
+                localStorage.removeItem('myadd')
+            }
+            if(res[0]){
+                localStorage.setItem('myadd',JSON.stringify(res[0]) )
+            }
+        })
+
+        this.UserService.ValidatePack().then((res:any)=>{
+
+            if(localStorage.getItem('pack')){
+                localStorage.removeItem('pack')
+            }
+
+            if(res.anuncios){
+                localStorage.setItem('pack',JSON.stringify(res) )
+            }
+            
+        })
+
     }
 
 
@@ -183,7 +219,9 @@ export class HomePage implements OnInit, AfterViewInit {
     // * MODALES ================================
     ctrl_menu: number = 0;
     server = environment.server;
-    
+    premium:boolean=false;
+    alert:number=0;
+
     //!FUNCIONES=============================================================
     //?CARGA=============================================================
     GetAnuncios() {
@@ -226,12 +264,15 @@ export class HomePage implements OnInit, AfterViewInit {
         },450)
     }
 
-    cardFav(id:any){
+    cardFav(id:any,anuncio:any){
         $("#"+id).addClass("card_fav")
 
         setTimeout(()=>{
             $("#"+id).css("display","none")
         },450)
+        this.FavoritoService.AddFavorite(anuncio.id).then(res=>{
+            console.log(res)
+        })
     }
 
     //?CONTROL==============================================================================
@@ -240,6 +281,14 @@ export class HomePage implements OnInit, AfterViewInit {
         this.add_select = $("#"+id);
         this.AnunciosService.anuncio = anuncio;
         this.router.navigate(['home/anuncio'])
+    }
+
+    OpenAnuncioPopular(){
+        if(this.premium){
+        
+        }else{
+            this.alert=1;
+        }
     }
 
     GetEdad(fecha: any) {

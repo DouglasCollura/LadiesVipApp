@@ -13,6 +13,7 @@ import { NegociosComponent } from '../negocios/negocios.component';
 import { CuentaAccesoComponent } from '../cuenta-acceso/cuenta-acceso.component';
 import { PagoComponent } from '../pago/pago.component';
 import { HelpComponent } from '../help/help.component';
+import { PlanesComponent } from '../planes/planes.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { HelpComponent } from '../help/help.component';
     NegociosComponent,
     CuentaAccesoComponent,
     PagoComponent,
-    HelpComponent
+    HelpComponent,
+    PlanesComponent
   ],
 })
 export class ConfigPageModule {}

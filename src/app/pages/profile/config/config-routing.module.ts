@@ -7,6 +7,7 @@ import { InformacionPersonalComponent } from '../informacion-personal/informacio
 import { NegociosComponent } from '../negocios/negocios.component';
 import { PacksAnunciosComponent } from '../packs-anuncios/packs-anuncios.component';
 import { PagoComponent } from '../pago/pago.component';
+import { PlanesComponent } from '../planes/planes.component';
 
 import { ConfigPage } from './config.page';
 
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: 'pago',
     component: PagoComponent
+  },
+  {
+    path: 'planes',
+    component: PlanesComponent
   },
   {
     path: 'help',
